@@ -1,0 +1,35 @@
+import pygame
+import os 
+from config import IMG_DIR, SND_DIR,FNT_DIR
+
+BACKGROUND = 'background'
+ROBOT_IMG = 'robot_img'
+MINION_STILL_IMG = 'minion_still_img'
+MINION_RUN_IMG = 'minion_run_img'
+PURPLE_MINION_IMG = 'purple_minion_img'
+DOWN_IMG = 'down_img'
+UP_IMG = 'up_img'
+UNICORN_IMG = 'unicorn_img'
+SORO_IMG = 'soro_img'
+RAIO_IMG = 'raio_img'
+BANANA_IMG = 'banana_img'
+FLOOR_IMG = 'floor_img'
+
+assets = {}
+assets['background'] = pygame.image.load(os.path.join(IMG_DIR,'background.png')).convert()
+assets['robot_img'] = pygame.image.load(os.path.join(IMG_DIR,'robo.png')).convert_alpha()
+assets['minion_still_img'] = pygame.image.load(os.path.join(IMG_DIR,'minion_still.png')).convert_alpha()
+assets['minion_run_img'] = pygame.image.load(os.path.join(IMG_DIR,'minion_running.png')).convert_alpha()
+assets['purple_minion_img'] = pygame.image.load(os.path.join(IMG_DIR,'purple_minion.png')).convert_alpha()
+assets['down_img'] = pygame.image.load(os.path.join(IMG_DIR,'embaixo.png')).convert_alpha()
+assets['up_img'] = pygame.image.load(os.path.join(IMG_DIR,'cima.png')).convert_alpha()
+assets['unicorn_img'] = pygame.image.load(os.path.join(IMG_DIR,'unicorn.png')).convert_alpha()
+assets['soro_img'] = pygame.image.load(os.path.join(IMG_DIR,'soro.png')).convert_alpha()
+assets['raio_img'] = pygame.image.load(os.path.join(IMG_DIR,'raio.png')).convert_alpha()
+assets['banana_img'] = pygame.image.load(os.path.join(IMG_DIR,'banana.png')).convert_alpha()
+assets['floor_img'] = pygame.image.load(os.path.join(IMG_DIR,'floor.png')).convert_alpha()
+
+assets['score_font'] = pygame.font.Font(os.path.join(FNT_DIR,'PressStart2P-Regular.ttf',28))
+
+pygame.mixer.music.load(os.path.join(SND_DIR,'relaxing-guitar-loop-v5-245859.mp3'))
+pygame.mixer.music.set_volume(0.4)
