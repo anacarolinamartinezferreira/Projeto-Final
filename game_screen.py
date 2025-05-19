@@ -1,7 +1,8 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT
 from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG
 from sprites import Minion,Robot,Banana,Soro
+from game_over_screen import game_over_screen
 
 
 def game_screen(window):
@@ -31,14 +32,13 @@ def game_screen(window):
         b = Banana(assets, HEIGHT-25, 100+50*i)
         all_sprites.add(b)
         all_bananas.add(b)
-    for i in range(2):
+    for i in range(3):
         # Criando os robôs
         r = Robot(assets)
         all_sprites.add(r)
         all_robots.add(r)
 
-
-    DONE = 0
+    GAME_OVER = 0
     PLAYING = 1
     EXPLODING = 2
     state = PLAYING
@@ -49,14 +49,14 @@ def game_screen(window):
 
     # ===== Loop principal =====
     pygame.mixer.music.play(loops=-1)
-    while state != DONE:
+    while state != QUIT:
         clock.tick(FPS)
 
         # ----- Trata eventos
         for event in pygame.event.get():
             # ----- Verifica consequências
             if event.type == pygame.QUIT:
-                state = DONE
+                state = QUIT
             # Só verifica o teclado se está no estado de jogo
             if state == PLAYING:
                 # Verifica se apertou alguma tecla.
@@ -111,7 +111,8 @@ def game_screen(window):
                 keys_down = {}
         elif state == EXPLODING:
             if lives == 0:
-                state = DONE
+                state = GAME_OVER
+                state = game_over_screen(window)
             else:
                 state = PLAYING
                 player = Minion(groups, assets)
