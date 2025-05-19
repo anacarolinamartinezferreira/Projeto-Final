@@ -10,6 +10,7 @@ def init_screen(screen):
 
     # Carrega o fundo da tela inicial 
     background = pygame.image.load(path.join(IMG_DIR, 'init_screen.png')).convert()
+    background = pygame.transform.scale(background,(600, 300))
     background_rect = background.get_rect()
 
     running = True 
@@ -26,12 +27,9 @@ def init_screen(screen):
                 running = False 
             
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_SPACE:
                     state = GAME
-                    running = False 
-                if event.key == pygame.K_SPACE: 
-                    state = INFO
-                    running = False 
+                    running = False
         
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
