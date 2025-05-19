@@ -23,14 +23,7 @@ def game_screen(window):
     # Criando o jogador
     player = (groups, assets)
     all_sprites.add(player)
-    # Criando os meteoros
-    for i in range(8):
-        banana = Banana(assets)
-        all_sprites.add(banana)
-        all_bananas.add(banana)
-        soro = Soro(assets)
-        all_sprites.add(soro)
-        all_soros.add(soro)
+    
 
     DONE = 0
     PLAYING = 1
