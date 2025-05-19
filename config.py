@@ -10,7 +10,9 @@ WIDTH = 600 # Largura da tela
 HEIGHT = 300 # Altura da tela
 MINION_WIDTH = 100
 MINION_HEIGHT = 50
-FPS = 60 # Frames por segundo
+FPS = 60 # Frames por segundo]
+BANANA_WIDTH = 50
+BANANA_HEIGHT = 25
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)

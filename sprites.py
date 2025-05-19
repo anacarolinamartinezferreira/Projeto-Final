@@ -31,11 +31,6 @@ class Minion(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
-    def banana(self):
-        # A nova bala vai ser criada logo acima e no centro horizontal da nave
-        new_banana = Banana(self.assets, self.rect.top, self.rect.centerx)
-        self.groups['all_sprites'].add(new_banana)
-        self.groups['all_bullets'].add(new_banana)
     
     def purple(self):
         self.image = self.assets[PURPLE_MINION_IMG]

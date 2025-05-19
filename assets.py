@@ -1,7 +1,7 @@
 import pygame
 pygame.display.init()
 import os 
-from config import IMG_DIR, SND_DIR,FNT_DIR, WIDTH, HEIGHT, MINION_WIDTH, MINION_HEIGHT
+from config import IMG_DIR, SND_DIR,FNT_DIR, WIDTH, HEIGHT, MINION_WIDTH, MINION_HEIGHT, BANANA_WIDTH, BANANA_HEIGHT
 
 BACKGROUND = 'background'
 ROBOT_IMG = 'robot_img'
@@ -34,6 +34,8 @@ def load_assets():
     assets['soro_img'] = pygame.image.load(os.path.join(IMG_DIR,'soro.png')).convert_alpha()
     assets['raio_img'] = pygame.image.load(os.path.join(IMG_DIR,'raio.png')).convert_alpha()
     assets['banana_img'] = pygame.image.load(os.path.join(IMG_DIR,'banana.png')).convert_alpha()
+    assets['banana_img'] = pygame.transform.scale(assets['banana_img'],(BANANA_WIDTH, BANANA_HEIGHT))
+
     assets['floor_img'] = pygame.image.load(os.path.join(IMG_DIR,'floor.png')).convert_alpha()
     assets[SCORE_FONT] = pygame.font.Font(os.path.join(FNT_DIR, 'PressStart2P-Regular.ttf'), 28)
 

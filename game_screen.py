@@ -25,6 +25,19 @@ def game_screen(window):
     all_sprites.add(player)
     
 
+
+    for i in range(10):
+        # Criando as bananas
+        b = Banana(assets, HEIGHT-25, 100+50*i)
+        all_sprites.add(b)
+        all_bananas.add(b)
+    for i in range(2):
+        # Criando os robôs
+        r = Robot(assets)
+        all_sprites.add(r)
+        all_robots.add(r)
+
+
     DONE = 0
     PLAYING = 1
     EXPLODING = 2
@@ -68,24 +81,24 @@ def game_screen(window):
         all_sprites.update()
 
         if state == PLAYING:
-            hits = pygame.sprite.groupcollide(all_soros, True, True, pygame.sprite.collide_mask)
+            hits = pygame.sprite.spritecollide(player, all_soros, True, pygame.sprite.collide_mask)
             for soro in hits:
-                Minion.image = assets[PURPLE_MINION_IMG] 
+                player.image = assets[PURPLE_MINION_IMG] 
                 s = Soro(assets)
                 all_sprites.add(s)
                 all_soros.add(s)
             # Verifica se houve colisão entre tiro e meteoro
-            hits = pygame.sprite.groupcollide(all_bananas, True, True, pygame.sprite.collide_mask)
+            hits = pygame.sprite.spritecollide(player, all_bananas, True, pygame.sprite.collide_mask)
             for banana in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
                 # O meteoro e destruido e precisa ser recriado
-                b = Banana(assets)
+                b = Banana(assets, HEIGHT-25, banana.rect.centerx+100)
                 all_sprites.add(b)
                 all_robots.add(b)
 
                 # Ganhou pontos!
-                if Minion.image == assets[MINION_STILL_IMG] or Minion.image == assets[MINION_RUN_IMG]:
+                if player.image == assets[MINION_STILL_IMG] or player.image == assets[MINION_RUN_IMG]:
                     score += 1
-                elif Minion.image == assets[PURPLE_MINION_IMG]:
+                elif player.image == assets[PURPLE_MINION_IMG]:
                     score += 2
 
             # Verifica se houve colisão entre nave e meteoro
