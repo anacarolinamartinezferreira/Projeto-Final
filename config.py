@@ -13,6 +13,8 @@ MINION_HEIGHT = 50
 FPS = 60 # Frames por segundo]
 BANANA_WIDTH = 50
 BANANA_HEIGHT = 25
+ROBOT_WIDTH = 90
+ROBOT_HEIGHT = 45
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)

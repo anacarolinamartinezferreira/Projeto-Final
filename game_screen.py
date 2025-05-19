@@ -93,7 +93,7 @@ def game_screen(window):
                 # O meteoro e destruido e precisa ser recriado
                 b = Banana(assets, HEIGHT-25, banana.rect.centerx+100)
                 all_sprites.add(b)
-                all_robots.add(b)
+                all_bananas.add(b)
 
                 # Ganhou pontos!
                 if player.image == assets[MINION_STILL_IMG] or player.image == assets[MINION_RUN_IMG]:
@@ -101,7 +101,7 @@ def game_screen(window):
                 elif player.image == assets[PURPLE_MINION_IMG]:
                     score += 2
 
-            # Verifica se houve colisão entre nave e meteoro
+            # Verifica se houve colisão entre minion e robô
             hits = pygame.sprite.spritecollide(player, all_robots, True, pygame.sprite.collide_mask)
             if len(hits) > 0:
                 # Toca o som da colisão

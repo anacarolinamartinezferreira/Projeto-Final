@@ -1,7 +1,7 @@
 import pygame
 pygame.display.init()
 import os 
-from config import IMG_DIR, SND_DIR,FNT_DIR, WIDTH, HEIGHT, MINION_WIDTH, MINION_HEIGHT, BANANA_WIDTH, BANANA_HEIGHT
+from config import IMG_DIR, SND_DIR,FNT_DIR, WIDTH, HEIGHT, MINION_WIDTH, MINION_HEIGHT, BANANA_WIDTH, BANANA_HEIGHT, ROBOT_WIDTH, ROBOT_HEIGHT
 
 BACKGROUND = 'background'
 ROBOT_IMG = 'robot_img'
@@ -22,6 +22,7 @@ def load_assets():
     assets['background'] = pygame.image.load(os.path.join(IMG_DIR,'background.png')).convert()
     assets['background'] = pygame.transform.scale(assets['background'],(WIDTH, HEIGHT))
     assets['robot_img'] = pygame.image.load(os.path.join(IMG_DIR,'robo.png')).convert_alpha()
+    assets['robot_img'] = pygame.transform.scale(assets['robot_img'],(ROBOT_WIDTH, ROBOT_HEIGHT))
     assets['minion_still_img'] = pygame.image.load(os.path.join(IMG_DIR,'minion_still.png')).convert_alpha()
     assets['minion_still_img'] = pygame.transform.scale(assets['minion_still_img'],(MINION_WIDTH, MINION_HEIGHT))
     assets['minion_run_img'] = pygame.image.load(os.path.join(IMG_DIR,'minion_run.png')).convert_alpha()
