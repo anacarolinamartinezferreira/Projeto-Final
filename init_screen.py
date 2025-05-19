@@ -27,7 +27,7 @@ def init_screen(screen):
                 running = False 
             
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_RETURN:
                     state = GAME
                     running = False
         

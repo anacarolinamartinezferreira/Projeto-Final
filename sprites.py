@@ -12,7 +12,7 @@ class Minion(pygame.sprite.Sprite):
         self.image = assets[MINION_STILL_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.centerx = 0
+        self.rect.centerx = WIDTH
         self.rect.bottom = HEIGHT
         self.speedx = 0
         self.groups = groups
