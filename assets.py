@@ -32,8 +32,7 @@ def load_assets():
     assets['raio_img'] = pygame.image.load(os.path.join(IMG_DIR,'raio.png')).convert_alpha()
     assets['banana_img'] = pygame.image.load(os.path.join(IMG_DIR,'banana.png')).convert_alpha()
     assets['floor_img'] = pygame.image.load(os.path.join(IMG_DIR,'floor.png')).convert_alpha()
-
-    assets['score_font'] = pygame.font.Font(os.path.join(FNT_DIR,'PressStart2P-Regular.ttf',28))
+    assets[SCORE_FONT] = pygame.font.Font(os.path.join(FNT_DIR, 'PressStart2P-Regular.ttf'), 28)
 
     pygame.mixer.music.load(os.path.join(SND_DIR,'relaxing-guitar-loop-v5-245859.mp3'))
     pygame.mixer.music.set_volume(0.4)

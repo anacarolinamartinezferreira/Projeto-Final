@@ -21,7 +21,7 @@ def game_screen(window):
     groups['all_soros'] = all_soros
 
     # Criando o jogador
-    player = (groups, assets)
+    player = Minion(groups, assets)
     all_sprites.add(player)
     
 
@@ -68,7 +68,7 @@ def game_screen(window):
         all_sprites.update()
 
         if state == PLAYING:
-            hits = pygame.sprite.grupocollide(all_soros, True, True, pygame.sprite.collide_mask)
+            hits = pygame.sprite.groupcollide(all_soros, True, True, pygame.sprite.collide_mask)
             for soro in hits:
                 Minion.image = assets[PURPLE_MINION_IMG] 
                 s = Soro(assets)
