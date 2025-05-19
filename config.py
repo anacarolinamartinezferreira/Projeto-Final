@@ -8,8 +8,8 @@ FNT_DIR = path.join(path.dirname(__file__), 'assets', 'font')
 # Dados gerais do jogo.
 WIDTH = 600 # Largura da tela
 HEIGHT = 300 # Altura da tela
-MINION_WIDHT = 0.2
-MINION_HEIGHT = 0.1
+MINION_WIDTH = 100
+MINION_HEIGHT = 50
 FPS = 60 # Frames por segundo
 
 # Define algumas variáveis com as cores básicas

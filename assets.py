@@ -1,7 +1,7 @@
 import pygame
 pygame.display.init()
 import os 
-from config import IMG_DIR, SND_DIR,FNT_DIR, WIDTH, HEIGHT, MINION_WIDHT, MINION_HEIGHT
+from config import IMG_DIR, SND_DIR,FNT_DIR, WIDTH, HEIGHT, MINION_WIDTH, MINION_HEIGHT
 
 BACKGROUND = 'background'
 ROBOT_IMG = 'robot_img'
@@ -23,11 +23,11 @@ def load_assets():
     assets['background'] = pygame.transform.scale(assets['background'],(WIDTH, HEIGHT))
     assets['robot_img'] = pygame.image.load(os.path.join(IMG_DIR,'robo.png')).convert_alpha()
     assets['minion_still_img'] = pygame.image.load(os.path.join(IMG_DIR,'minion_still.png')).convert_alpha()
-    assets['minion_still_img'] = pygame.transform.scale(assets['minion_still_img'],(WIDTH, HEIGHT))
+    assets['minion_still_img'] = pygame.transform.scale(assets['minion_still_img'],(MINION_WIDTH, MINION_HEIGHT))
     assets['minion_run_img'] = pygame.image.load(os.path.join(IMG_DIR,'minion_run.png')).convert_alpha()
-    assets['minion_run_img'] = pygame.transform.scale(assets['minion_run_img'],(WIDTH, HEIGHT))
+    assets['minion_run_img'] = pygame.transform.scale(assets['minion_run_img'],(MINION_WIDTH, MINION_HEIGHT))
     assets['purple_minion_img'] = pygame.image.load(os.path.join(IMG_DIR,'purple_minion.png')).convert_alpha()
-    assets['purple_minion_img'] = pygame.transform.scale(assets['purple_minion_img'],(WIDTH, HEIGHT))
+    assets['purple_minion_img'] = pygame.transform.scale(assets['purple_minion_img'],(MINION_WIDTH, MINION_HEIGHT))
     assets['down_img'] = pygame.image.load(os.path.join(IMG_DIR,'embaixo.png')).convert_alpha()
     assets['up_img'] = pygame.image.load(os.path.join(IMG_DIR,'cima.png')).convert_alpha()
     assets['unicorn_img'] = pygame.image.load(os.path.join(IMG_DIR,'unicorn.png')).convert_alpha()

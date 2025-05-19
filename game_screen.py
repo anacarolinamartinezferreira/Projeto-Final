@@ -61,7 +61,7 @@ def game_screen(window):
                         if event.key == pygame.K_RIGHT:
                             player.speedx -= 8
                         if event.key == pygame.K_UP:
-                            player.speedy += 8
+                            player.speedy -= 8
 
         # ----- Atualiza estado do jogo
         # Atualizando a posição dos meteoros
