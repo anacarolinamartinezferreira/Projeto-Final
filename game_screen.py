@@ -1,5 +1,5 @@
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER
 from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG
 from sprites import Minion,Robot,Banana,Soro
 from game_over_screen import game_over_screen
@@ -38,9 +38,8 @@ def game_screen(window):
         all_sprites.add(r)
         all_robots.add(r)
 
-    GAME_OVER = 0
-    PLAYING = 1
-    EXPLODING = 2
+    PLAYING = 0
+    EXPLODING = 1
     state = PLAYING
 
     keys_down = {}
@@ -49,7 +48,7 @@ def game_screen(window):
 
     # ===== Loop principal =====
     pygame.mixer.music.play(loops=-1)
-    while state != QUIT:
+    while state != QUIT and state != GAME_OVER:
         clock.tick(FPS)
 
         # ----- Trata eventos
@@ -113,7 +112,6 @@ def game_screen(window):
         elif state == EXPLODING:
             if lives == 0:
                 state = GAME_OVER
-                state = game_over_screen(window)
             else:
                 state = PLAYING
                 player = Minion(groups, assets)
@@ -138,3 +136,4 @@ def game_screen(window):
         window.blit(text_surface, text_rect)
 
         pygame.display.update()  # Mostra o novo frame para o jogador
+    return state 
