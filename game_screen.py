@@ -69,18 +69,32 @@ def game_screen(window):
                     # Dependendo da tecla, altera a velocidade.
                     keys_down[event.key] = True
                     if event.key == pygame.K_RIGHT:
-                        player.speedx += 8
-                    if event.key == pygame.K_UP:
-                        player.speedy -= 8
+                        all_sprites.update()
+                        # A cada loop, redesenha o fundo e os sprites
+                        window.fill(BLACK)
+                        # Atualiza a posição da imagem de fundo.
+                        background_rect.x += world_speed
+                        # Se o fundo saiu da janela, faz ele voltar para dentro.
+                        if background_rect.right < 0:
+                            background_rect.x += background_rect.width
+                            # Desenha o fundo e uma cópia para a direita.
+                            # Assumimos que a imagem selecionada ocupa pelo menos o tamanho da janela.
+                            # Além disso, ela deve ser cíclica, ou seja, o lado esquerdo deve ser continuação do direito.
+                            window.blit(background, background_rect)
+                            # Desenhamos a imagem novamente, mas deslocada da largura da imagem em x.
+                            background_rect2 = background_rect.copy()
+                            background_rect2.x += background_rect2.width
+                            window.blit(background, background_rect2)
+
+                        all_sprites.draw(window)
+                    # Depois de desenhar tudo, inverte o display.
+                    pygame.display.flip()                        
                 # Verifica se soltou alguma tecla.
                 if event.type == pygame.KEYUP:
                     # Dependendo da tecla, altera a velocidade.
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
                             player.image = assets[MINION_STILL_IMG]
-                            player.speedx -= 8
-                        if event.key == pygame.K_UP:
-                            player.speedy += 8
 
         if state == PLAYING:
             hits = pygame.sprite.spritecollide(player, all_soros, True, pygame.sprite.collide_mask)
@@ -119,28 +133,6 @@ def game_screen(window):
                 player = Minion(groups, assets)
                 all_sprites.add(player)
 
-        all_sprites.update()
-        # A cada loop, redesenha o fundo e os sprites
-        window.fill(BLACK)
-
-        # Atualiza a posição da imagem de fundo.
-        background_rect.x += world_speed
-        # Se o fundo saiu da janela, faz ele voltar para dentro.
-        if background_rect.right < 0:
-            background_rect.x += background_rect.width
-            # Desenha o fundo e uma cópia para a direita.
-            # Assumimos que a imagem selecionada ocupa pelo menos o tamanho da janela.
-            # Além disso, ela deve ser cíclica, ou seja, o lado esquerdo deve ser continuação do direito.
-            window.blit(background, background_rect)
-            # Desenhamos a imagem novamente, mas deslocada da largura da imagem em x.
-            background_rect2 = background_rect.copy()
-            background_rect2.x += background_rect2.width
-            window.blit(background, background_rect2)
-
-        all_sprites.draw(window)
-        # Depois de desenhar tudo, inverte o display.
-        pygame.display.flip()
-        
         # Desenhando o score
         text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
         text_rect = text_surface.get_rect()

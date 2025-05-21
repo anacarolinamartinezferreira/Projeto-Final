@@ -14,17 +14,12 @@ class Minion(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = -WIDTH
         self.rect.bottom = HEIGHT
-        self.speedx = 0
+        self.speedx=0
         self.speedy = 0 
         self.groups = groups
         self.assets = assets
 
-    def update(self):
-        # Atualização da posição da nave
-        if self.speedx > 0:
-            self.image = self.assets[MINION_RUN_IMG]
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
+
 
         # Mantem dentro da tela
         if self.rect.right > WIDTH:

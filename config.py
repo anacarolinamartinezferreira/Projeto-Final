@@ -6,15 +6,15 @@ SND_DIR = path.join(path.dirname(__file__), 'assets', 'snd')
 FNT_DIR = path.join(path.dirname(__file__), 'assets', 'font')
 
 # Dados gerais do jogo.
-WIDTH = 600 # Largura da tela
-HEIGHT = 300 # Altura da tela
-MINION_WIDTH = 100
-MINION_HEIGHT = 50
+WIDTH = 1500 # Largura da tela
+HEIGHT = 750 # Altura da tela
+MINION_WIDTH = 210
+MINION_HEIGHT = 120
 FPS = 60 # Frames por segundo]
-BANANA_WIDTH = 50
-BANANA_HEIGHT = 25
-ROBOT_WIDTH = 90
-ROBOT_HEIGHT = 45
+BANANA_WIDTH = 110
+BANANA_HEIGHT = 60
+ROBOT_WIDTH = 200
+ROBOT_HEIGHT = 100
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)
