@@ -2,7 +2,6 @@ import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER
 from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG
 from sprites import Minion,Robot,Banana,Soro
-from game_over_screen import game_over_screen
 
 world_speed=-10
 
@@ -46,6 +45,12 @@ def game_screen(window):
     keys_down = {}
     score = 0
     lives = 3
+    # ----- Gera saídas
+    # Carrega o fundo do jogo
+    background = assets['background']
+    # Redimensiona o fundo
+    background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+    background_rect = background.get_rect()
 
     # ===== Loop principal =====
     pygame.mixer.music.play(loops=-1)
@@ -76,30 +81,6 @@ def game_screen(window):
                             player.speedx -= 8
                         if event.key == pygame.K_UP:
                             player.speedy += 8
-
-
-        all_sprites.update()
-        # A cada loop, redesenha o fundo e os sprites
-        window.fill(BLACK)
-
-        # Atualiza a posição da imagem de fundo.
-        background_rect.x += world_speed
-        # Se o fundo saiu da janela, faz ele voltar para dentro.
-        if background_rect.right < 0:
-        background_rect.x += background_rect.width
-        # Desenha o fundo e uma cópia para a direita.
-        # Assumimos que a imagem selecionada ocupa pelo menos o tamanho da janela.
-        # Além disso, ela deve ser cíclica, ou seja, o lado esquerdo deve ser continuação do direito.
-        window.blit(background, background_rect)
-        # Desenhamos a imagem novamente, mas deslocada da largura da imagem em x.
-        background_rect2 = background_rect.copy()
-        background_rect2.x += background_rect2.width
-        window.blit(background, background_rect2)
-
-        all_sprites.draw(window)
-        # Depois de desenhar tudo, inverte o display.
-        pygame.display.flip()
-        
 
         if state == PLAYING:
             hits = pygame.sprite.spritecollide(player, all_soros, True, pygame.sprite.collide_mask)
@@ -138,12 +119,28 @@ def game_screen(window):
                 player = Minion(groups, assets)
                 all_sprites.add(player)
 
-        # ----- Gera saídas
-        window.fill(BLACK)  # Preenche com a cor branca
-        window.blit(assets[BACKGROUND], (0, 0))
-        # Desenhando meteoros
-        all_sprites.draw(window)
+        all_sprites.update()
+        # A cada loop, redesenha o fundo e os sprites
+        window.fill(BLACK)
 
+        # Atualiza a posição da imagem de fundo.
+        background_rect.x += world_speed
+        # Se o fundo saiu da janela, faz ele voltar para dentro.
+        if background_rect.right < 0:
+            background_rect.x += background_rect.width
+            # Desenha o fundo e uma cópia para a direita.
+            # Assumimos que a imagem selecionada ocupa pelo menos o tamanho da janela.
+            # Além disso, ela deve ser cíclica, ou seja, o lado esquerdo deve ser continuação do direito.
+            window.blit(background, background_rect)
+            # Desenhamos a imagem novamente, mas deslocada da largura da imagem em x.
+            background_rect2 = background_rect.copy()
+            background_rect2.x += background_rect2.width
+            window.blit(background, background_rect2)
+
+        all_sprites.draw(window)
+        # Depois de desenhar tudo, inverte o display.
+        pygame.display.flip()
+        
         # Desenhando o score
         text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
         text_rect = text_surface.get_rect()
