@@ -1,8 +1,12 @@
 import pygame
+pygame.display.init()
 import random 
+import os
 from os import path
+from assets import load_assets,GAME_OVER_SOUND
+from config import IMG_DIR, BLACK, FPS, INIT , QUIT, INFO, SND_DIR
 
-from config import IMG_DIR, BLACK, FPS, INIT , QUIT, INFO
+assets = load_assets()
 
 def game_over_screen(screen): 
     # Variável para ajuste de velocidade 
@@ -15,7 +19,7 @@ def game_over_screen(screen):
 
     running = True 
     while running: 
-
+        assets[GAME_OVER_SOUND].play()
         # Ajusta a velocidade do jogo. 
         clock.tick(FPS)
 
