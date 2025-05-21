@@ -72,6 +72,7 @@ def game_screen(window):
                     # Dependendo da tecla, altera a velocidade.
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
+                            player.image = assets[MINION_STILL_IMG]
                             player.speedx -= 8
                         if event.key == pygame.K_UP:
                             player.speedy -= 8
