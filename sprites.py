@@ -24,6 +24,7 @@ class Minion(pygame.sprite.Sprite):
         if self.speedx > 0:
             self.image = self.assets[MINION_RUN_IMG]
         self.rect.x += self.speedx
+        self.rect.y += self.speedy
 
         # Mantem dentro da tela
         if self.rect.right > WIDTH:

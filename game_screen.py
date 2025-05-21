@@ -66,7 +66,7 @@ def game_screen(window):
                     if event.key == pygame.K_RIGHT:
                         player.speedx += 8
                     if event.key == pygame.K_UP:
-                        player.speedy += 8
+                        player.speedy -= 8
                 # Verifica se soltou alguma tecla.
                 if event.type == pygame.KEYUP:
                     # Dependendo da tecla, altera a velocidade.
@@ -75,7 +75,7 @@ def game_screen(window):
                             player.image = assets[MINION_STILL_IMG]
                             player.speedx -= 8
                         if event.key == pygame.K_UP:
-                            player.speedy -= 8
+                            player.speedy += 8
 
         # ----- Atualiza estado do jogo
         # Atualizando a posição dos meteoros
