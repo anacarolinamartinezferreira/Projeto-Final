@@ -6,11 +6,10 @@ from os import path
 from assets import load_assets,GAME_OVER_SOUND
 from config import IMG_DIR, BLACK, FPS, INIT , QUIT, INFO, SND_DIR
 
-assets = load_assets()
-
 def game_over_screen(screen): 
     # Variável para ajuste de velocidade 
     clock = pygame.time.Clock()
+    assets = load_assets()
 
     # Carrega o fundo da tela inicial 
     background = pygame.image.load(path.join(IMG_DIR, 'game_over_screen.png')).convert()
