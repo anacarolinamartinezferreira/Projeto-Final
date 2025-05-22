@@ -3,7 +3,7 @@ from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER
 from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG
 from sprites import Minion,Robot,Banana,Soro
 
-world_speed=-10
+world_speed=-30
 
 def game_screen(window):
     # Variável para o ajuste de velocidade
