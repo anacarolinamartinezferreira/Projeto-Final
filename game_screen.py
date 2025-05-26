@@ -52,6 +52,10 @@ def game_screen(window):
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     background_rect = background.get_rect()
     moving=False
+    pulo = False
+    desce =False
+    delta_ms = 0
+    delta_ms_down = 0
     # ===== Loop principal =====
     pygame.mixer.music.play(loops=-1)
     while state != QUIT and state != GAME_OVER:
@@ -76,19 +80,36 @@ def game_screen(window):
                         moving=True
                         b.speedx -= 8
                     if event.key == pygame.K_UP:
-                        player.speedy -= 8 
-                        
-    
-                # Verifica se soltou alguma tecla.
+                        delta_ms = pygame.time.get_ticks() + 400
+                        pulo = True 
+                        player.speedy -= 8
+                            # Verifica se soltou alguma tecla.
                 if event.type == pygame.KEYUP:
                     # Dependendo da tecla, altera a velocidade.
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
                             moving=False
                             b.speedx += 8
-                            player.image = assets[MINION_STILL_IMG]
-                        if event.key == pygame.K_UP:
-                            player.speedy += 8
+                            player.image = assets[MINION_STILL_IMG] 
+                        
+        if pygame.time.get_ticks() >  delta_ms and pulo:
+            print("pulei")
+            pulo = False
+            desce = True
+            delta_ms_down = pygame.time.get_ticks() + 400
+            player.speedy += 16
+    
+        if pygame.time.get_ticks() > delta_ms_down and desce:
+            print("parei")
+            desce = False
+            player.speedy = 0
+
+                
+
+
+
+
+                            
 
         if moving==True:
             player.image = assets[MINION_RUN_IMG]
