@@ -4,7 +4,7 @@ import random
 import os
 from os import path
 from assets import load_assets,GAME_OVER_SOUND
-from config import IMG_DIR, BLACK, FPS, INIT , QUIT, INFO, SND_DIR
+from config import IMG_DIR, BLACK, FPS, INIT , QUIT, INFO, SND_DIR, WIDTH, HEIGHT 
 
 def game_over_screen(screen): 
     # Variável para ajuste de velocidade 
@@ -13,7 +13,7 @@ def game_over_screen(screen):
 
     # Carrega o fundo da tela inicial 
     background = pygame.image.load(path.join(IMG_DIR, 'game_over_screen.png')).convert()
-    background = pygame.transform.scale(background,(600, 300))
+    background = pygame.transform.scale(background,(WIDTH, HEIGHT))
     background_rect = background.get_rect()
 
     running = True 
