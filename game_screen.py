@@ -1,10 +1,13 @@
 import pygame
 import random
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER
-from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG
+from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER, INFO, INIT, GAME
+from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND
 from sprites import Minion,Robot,Banana,Soro
 
 world_speed=-10
+
+# Variável global para armazenar o recorde
+high_score = 0
 
 def game_screen(window):
     # Variável para o ajuste de velocidade
@@ -256,6 +259,11 @@ def game_screen(window):
                     lives -= 1
                     if lives == 0:
                         state = GAME_OVER
+                        # Atualiza o recorde se necessário
+                        global high_score
+                        if score > high_score:
+                            high_score = score
+                        return state, score, high_score
 
         all_sprites.draw(window)
 
@@ -273,4 +281,6 @@ def game_screen(window):
         window.blit(text_surface, text_rect)
 
         pygame.display.update()  # Mostra o novo frame para o jogador
-    return state 
+    
+    # Se o jogo terminar por outro motivo, também retorna as pontuações
+    return state, score, high_score 

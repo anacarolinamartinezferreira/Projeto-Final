@@ -17,15 +17,18 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Escape from Vector!')
 
 state = INIT
+current_score = 0
+high_score = 0
+
 while state != QUIT:
     if state == INIT:
         state = init_screen(window)
     elif state == GAME:
-        state = game_screen(window)
+        state, current_score, high_score = game_screen(window)
     elif state == INFO:
         state = info_screen(window)
     elif state == GAME_OVER:
-        state = game_over_screen(window)
+        state = game_over_screen(window, current_score, high_score)
     else:
         state = QUIT
 
