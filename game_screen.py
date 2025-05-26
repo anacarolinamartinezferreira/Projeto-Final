@@ -4,10 +4,9 @@ from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER, INFO
 from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND
 from sprites import Minion,Robot,Banana,Soro
 
-world_speed=-10
+world_speed=-10 # Velocidade que a tela moverá
 
-# Variável global para armazenar o recorde
-high_score = 0
+high_score = 0 # Variável para armazenar o recorde
 
 def game_screen(window):
     # Variável para o ajuste de velocidade
@@ -15,7 +14,7 @@ def game_screen(window):
 
     assets = load_assets()
 
-    # Criando um grupo de meteoros
+    # Criando grupos
     all_sprites = pygame.sprite.Group()
     all_bananas = pygame.sprite.Group()
     all_robots = pygame.sprite.Group()
@@ -29,15 +28,14 @@ def game_screen(window):
     player = Minion(groups, assets)
     all_sprites.add(player)
     
-    # Posição inicial para a primeira banana e robôs (começando bem depois do Minion)
+    # Posição inicial para a primeira banana e robôs (depois do Minion)
     current_x = WIDTH + 200  # Começa uma tela depois do início
     
     # Lista para guardar posições ocupadas
     posicoes_ocupadas = []
 
-    # Primeiro criamos os robôs para que apareçam antes das bananas
-    for i in range(2):  # Reduzindo para apenas 2 robôs
-        # Criando os robôs com espaçamento menor
+    # Criando robôs
+    for i in range(2):
         r = Robot(assets, HEIGHT-25, current_x)
         all_sprites.add(r)
         all_robots.add(r)
@@ -46,9 +44,8 @@ def game_screen(window):
         # Adiciona um espaçamento aleatório entre 500 e 800 pixels para o próximo robô
         current_x += random.randint(500, 800)
 
-    # Agora criamos as bananas depois dos robôs
+    # Criando bananas
     for i in range(10):
-        # Tenta encontrar uma posição válida para a banana
         posicao_valida = False
         while not posicao_valida:
             # Verifica se a posição atual não está muito próxima de nenhum robô
@@ -76,17 +73,19 @@ def game_screen(window):
     keys_down = {}
     score = 0
     lives = 3
-    # ----- Gera saídas
+ 
     # Carrega o fundo do jogo
     background = assets['background']
     # Redimensiona o fundo
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     background_rect = background.get_rect()
+
     moving=False
     pulo = False
     desce =False
     delta_ms = 0
     delta_ms_down = 0
+
     # ===== Loop principal =====
     pygame.mixer.music.play(loops=-1)
     while state != QUIT and state != GAME_OVER:
@@ -101,26 +100,29 @@ def game_screen(window):
             # ----- Verifica consequências
             if event.type == pygame.QUIT:
                 state = QUIT
-            # Só verifica o teclado se está no estado de jogo
+            # Verifica o teclado se está no estado de jogo
             if state == PLAYING:
+
                 # Verifica se apertou alguma tecla.
                 if event.type == pygame.KEYDOWN:
-                    # Dependendo da tecla, altera a velocidade.
+                    # Dependendo da tecla, altera o estado de movimento
                     keys_down[event.key] = True
                     if event.key == pygame.K_RIGHT:
                         moving = True
-                        # Faz todas as bananas se moverem em direção ao Minion
+                        # Faz todas as bananas se moverem 
                         for banana in all_bananas:
-                            banana.speedx = world_speed  # Inverte a direção para ir ao encontro do Minion
+                            banana.speedx = world_speed 
+                        # Faz todos os robôs se moverem
                         for robos in all_robots:
                             robos.speedx = world_speed
                     if event.key == pygame.K_UP and not pulo and not desce:
                         delta_ms = pygame.time.get_ticks() + 400
-                        pulo = True 
+                        pulo = True # Incia o pulo
                         player.speedy -= 8
-                            # Verifica se soltou alguma tecla.
+
+                # Verifica se soltou alguma tecla.
                 if event.type == pygame.KEYUP:
-                    # Dependendo da tecla, altera a velocidade.
+                    # Dependendo da tecla, altera o estado de movimento
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
                             moving=False
@@ -129,12 +131,14 @@ def game_screen(window):
                             # Para o movimento das bananas quando o jogador para
                             for banana in all_bananas:
                                 banana.speedx = 0
+                            # Para o movimento dos robôs qunado o jogador para
                             for robos in all_robots: 
                                 robos.speedx = 0
-
+        
+        # Fazendo o minion pular e, em seguida, descer
         if pygame.time.get_ticks() >  delta_ms and pulo:
             pulo = False
-            desce = True
+            desce = True # Incia descida
             delta_ms_down = pygame.time.get_ticks() + 400
             player.speedy += 16
     
@@ -142,19 +146,17 @@ def game_screen(window):
             desce = False
             player.speedy = 0
 
+
         if moving==True:
             player.image = assets[MINION_RUN_IMG]
             player.image.set_alpha(player.alpha)  # Mantém a opacidade atual
             background_rect.x += world_speed
             
-        # Desenha o fundo principal
         window.blit(background, background_rect)
-        
         # Cria e desenha uma cópia do fundo logo após o primeiro
         background_rect2 = background_rect.copy()
         background_rect2.x = background_rect.right
         window.blit(background, background_rect2)
-        
         # Se o fundo principal saiu completamente da tela, reseta sua posição
         if background_rect.right <= 0:
             background_rect.x = 0
@@ -198,13 +200,13 @@ def game_screen(window):
                 s = Soro(assets)
                 all_sprites.add(s)
                 all_soros.add(s)
-            # Verifica se houve colisão entre tiro e meteoro
+            
+            # Verifica se houve colisão entre minion e banana
             hits = pygame.sprite.spritecollide(player, all_bananas, True, pygame.sprite.collide_mask)
             for banana in hits:
                 # Encontra uma posição válida para a nova banana
                 posicao_valida = False
                 novo_x = max([b.rect.centerx for b in all_bananas]) + random.randint(200, 400) if all_bananas else player.rect.centerx + WIDTH
-                
                 while not posicao_valida:
                     posicao_valida = True
                     # Verifica se há robôs próximos
@@ -213,7 +215,6 @@ def game_screen(window):
                             posicao_valida = False
                             novo_x += 100
                             break
-                
                 # Escolhe uma altura aleatória para a nova banana
                 altura_banana = random.choice([HEIGHT-25, HEIGHT-150])
                 # Cria a nova banana bem mais longe
@@ -236,7 +237,6 @@ def game_screen(window):
                 # Encontra uma posição válida para o novo robô
                 posicao_valida = False
                 novo_x = max([r.rect.centerx for r in all_robots]) + random.randint(500, 800) if all_robots else player.rect.centerx + WIDTH
-                
                 while not posicao_valida:
                     posicao_valida = True
                     # Verifica se há bananas próximas

@@ -12,7 +12,7 @@ class Minion(pygame.sprite.Sprite):
         self.image = assets[MINION_STILL_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.centerx = 100  # Posição inicial ajustada para ficar visível na tela
+        self.rect.centerx = 100  
         self.rect.bottom = HEIGHT
         self.speedy = 0 
         self.groups = groups
@@ -74,10 +74,10 @@ class Robot(pygame.sprite.Sprite):
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centerx = centerx
         self.rect.bottom = bottom
-        self.speedx = 0  # Adiciona velocidade horizontal
-        self.speedy = 0  # Adiciona velocidade vertical
+        self.speedx = 0  
+        self.speedy = 0  
 
-        # Se o tiro passar do inicio da tela, morre.
+        # Se o robô passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
             
@@ -122,8 +122,8 @@ class Soro(pygame.sprite.Sprite):
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centerx = centerx
         self.rect.bottom = bottom
-        self.speedx = 0 # Velocidade fixa para cima
+        self.speedx = 0 
 
-        # Se o tiro passar do inicio da tela, morre.
+        # Se o soro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
