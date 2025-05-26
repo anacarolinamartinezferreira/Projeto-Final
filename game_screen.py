@@ -29,7 +29,7 @@ def game_screen(window):
 
     for i in range(10):
         # Criando as bananas
-        b = Banana(assets, HEIGHT-25, 100+50*i)
+        b = Banana(assets, HEIGHT-25, 200+50*i)
         all_sprites.add(b)
         all_bananas.add(b)
     for i in range(3):
@@ -74,7 +74,9 @@ def game_screen(window):
                     keys_down[event.key] = True
                     if event.key == pygame.K_RIGHT:
                         moving=True
-                        b.speedx += 8
+                        b.speedx -= 8
+                    if event.key == pygame.K_UP:
+                        player.speedy -= 8 
                         
     
                 # Verifica se soltou alguma tecla.
@@ -83,9 +85,13 @@ def game_screen(window):
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
                             moving=False
-                            b.speedx -= 8
+                            b.speedx += 8
                             player.image = assets[MINION_STILL_IMG]
+                        if event.key == pygame.K_UP:
+                            player.speedy += 8
+
         if moving==True:
+            player.image = assets[MINION_RUN_IMG]
             background_rect.x += world_speed
                         # Se o fundo saiu da janela, faz ele voltar para dentro.
             if background_rect.right < 0:
