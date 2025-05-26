@@ -4,7 +4,7 @@ import random
 import os
 from os import path
 from assets import load_assets, GAME_OVER_SOUND, SCORE_FONT
-from config import IMG_DIR, BLACK, FPS, INIT, QUIT, INFO, SND_DIR, WIDTH, HEIGHT, YELLOW
+from config import IMG_DIR, BLACK, FPS, INIT, QUIT, INFO, SND_DIR, WIDTH, HEIGHT, RED
 
 def game_over_screen(screen, score, high_score): 
     # Variável para ajuste de velocidade 
@@ -39,17 +39,17 @@ def game_over_screen(screen, score, high_score):
         screen.blit(background, background_rect)
 
         # Desenha a pontuação atual
-        score_text = assets[SCORE_FONT].render(f"Score: {score}", True, YELLOW)
+        score_text = assets[SCORE_FONT].render(f"Score: {score}", True, BLACK)
         score_rect = score_text.get_rect()
         score_rect.centerx = WIDTH / 2
-        score_rect.centery = HEIGHT / 2 + 50
+        score_rect.centery = HEIGHT - 20
         screen.blit(score_text, score_rect)
 
         # Desenha o recorde
-        high_score_text = assets[SCORE_FONT].render(f"High Score: {high_score}", True, YELLOW)
+        high_score_text = assets[SCORE_FONT].render(f"High Score: {high_score}", True, BLACK)
         high_score_rect = high_score_text.get_rect()
         high_score_rect.centerx = WIDTH / 2
-        high_score_rect.centery = HEIGHT / 2 + 100
+        high_score_rect.centery = HEIGHT - 80
         screen.blit(high_score_text, high_score_rect)
 
         # Depois de desenhar tudo, inverte o display
