@@ -73,8 +73,8 @@ def game_screen(window):
                     # Dependendo da tecla, altera a velocidade.
                     keys_down[event.key] = True
                     if event.key == pygame.K_RIGHT:
-                        
                         moving=True
+                        b.speedx += 8
                         
     
                 # Verifica se soltou alguma tecla.
@@ -83,6 +83,7 @@ def game_screen(window):
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
                             moving=False
+                            b.speedx -= 8
                             player.image = assets[MINION_STILL_IMG]
         if moving==True:
             background_rect.x += world_speed

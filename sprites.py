@@ -62,6 +62,8 @@ class Banana(pygame.sprite.Sprite):
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centerx = centerx
         self.rect.bottom = bottom
+        self.speedx = 0
+        self.speedy = 0
 
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
