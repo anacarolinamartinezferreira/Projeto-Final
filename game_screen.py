@@ -79,7 +79,7 @@ def game_screen(window):
                     if event.key == pygame.K_RIGHT:
                         moving=True
                         b.speedx -= 8
-                    if event.key == pygame.K_UP:
+                    if event.key == pygame.K_UP and not pulo and not desce:
                         delta_ms = pygame.time.get_ticks() + 400
                         pulo = True 
                         player.speedy -= 8
