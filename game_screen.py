@@ -1,4 +1,5 @@
 import pygame
+import random
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER
 from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG
 from sprites import Minion,Robot,Banana,Soro
@@ -25,13 +26,17 @@ def game_screen(window):
     player = Minion(groups, assets)
     all_sprites.add(player)
     
-
+    # Posição inicial para a primeira banana
+    current_x = 200
 
     for i in range(10):
-        # Criando as bananas
-        b = Banana(assets, HEIGHT-25, 200+50*i)
+        # Criando as bananas com espaçamento aleatório
+        b = Banana(assets, HEIGHT-25, current_x)
         all_sprites.add(b)
         all_bananas.add(b)
+        # Adiciona um espaçamento aleatório entre 50 e 150 pixels para a próxima banana
+        current_x += random.randint(50, WIDTH)
+
     for i in range(3):
         # Criando os robôs
         r = Robot(assets, HEIGHT-25, 100+50*i)
@@ -79,6 +84,9 @@ def game_screen(window):
                     if event.key == pygame.K_RIGHT:
                         moving=True
                         b.speedx -= 8
+                        # Faz todas as bananas se moverem em direção ao Minion
+                        for banana in all_bananas:
+                            banana.speedx = -world_speed  # Inverte a direção para ir ao encontro do Minion
                     if event.key == pygame.K_UP and not pulo and not desce:
                         delta_ms = pygame.time.get_ticks() + 400
                         pulo = True 
@@ -90,26 +98,19 @@ def game_screen(window):
                         if event.key == pygame.K_RIGHT:
                             moving=False
                             b.speedx += 8
-                            player.image = assets[MINION_STILL_IMG] 
-                        
+                            player.image = assets[MINION_STILL_IMG]
+                            # Para o movimento das bananas quando o jogador para
+                            for banana in all_bananas:
+                                banana.speedx = 0
         if pygame.time.get_ticks() >  delta_ms and pulo:
-            print("pulei")
             pulo = False
             desce = True
             delta_ms_down = pygame.time.get_ticks() + 400
             player.speedy += 16
     
         if pygame.time.get_ticks() > delta_ms_down and desce:
-            print("parei")
             desce = False
             player.speedy = 0
-
-                
-
-
-
-
-                            
 
         if moving==True:
             player.image = assets[MINION_RUN_IMG]
@@ -139,9 +140,12 @@ def game_screen(window):
                 all_soros.add(s)
             # Verifica se houve colisão entre tiro e meteoro
             hits = pygame.sprite.spritecollide(player, all_bananas, True, pygame.sprite.collide_mask)
-            for banana in hits: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
+            for banana in hits:
                 # O meteoro e destruido e precisa ser recriado
                 b = Banana(assets, HEIGHT-25, banana.rect.centerx+100)
+                # Se o jogador estiver se movendo, a nova banana também deve se mover
+                if moving:
+                    b.speedx = -world_speed  # Inverte a direção para ir ao encontro do Minion
                 all_sprites.add(b)
                 all_bananas.add(b)
 
