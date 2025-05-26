@@ -3,7 +3,7 @@ from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER
 from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG
 from sprites import Minion,Robot,Banana,Soro
 
-world_speed=-30
+world_speed=-10
 
 def game_screen(window):
     # Variável para o ajuste de velocidade
@@ -51,11 +51,15 @@ def game_screen(window):
     # Redimensiona o fundo
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     background_rect = background.get_rect()
-
+    moving=False
     # ===== Loop principal =====
     pygame.mixer.music.play(loops=-1)
     while state != QUIT and state != GAME_OVER:
         clock.tick(FPS)
+        # A cada loop, redesenha o fundo e os sprites
+        window.fill(BLACK)
+        window.blit(background, background_rect)
+
 
         # ----- Trata eventos
         for event in pygame.event.get():
@@ -69,32 +73,33 @@ def game_screen(window):
                     # Dependendo da tecla, altera a velocidade.
                     keys_down[event.key] = True
                     if event.key == pygame.K_RIGHT:
-                        all_sprites.update()
-                        # A cada loop, redesenha o fundo e os sprites
-                        window.fill(BLACK)
-                        # Atualiza a posição da imagem de fundo.
-                        background_rect.x += world_speed
-                        # Se o fundo saiu da janela, faz ele voltar para dentro.
-                        if background_rect.right < 0:
-                            background_rect.x += background_rect.width
-                            # Desenha o fundo e uma cópia para a direita.
-                            # Assumimos que a imagem selecionada ocupa pelo menos o tamanho da janela.
-                            # Além disso, ela deve ser cíclica, ou seja, o lado esquerdo deve ser continuação do direito.
-                            window.blit(background, background_rect)
-                            # Desenhamos a imagem novamente, mas deslocada da largura da imagem em x.
-                            background_rect2 = background_rect.copy()
-                            background_rect2.x += background_rect2.width
-                            window.blit(background, background_rect2)
-
-                        all_sprites.draw(window)
-                    # Depois de desenhar tudo, inverte o display.
-                    pygame.display.flip()                        
+                        
+                        moving=True
+                        
+    
                 # Verifica se soltou alguma tecla.
                 if event.type == pygame.KEYUP:
                     # Dependendo da tecla, altera a velocidade.
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
+                            moving=False
                             player.image = assets[MINION_STILL_IMG]
+        if moving==True:
+            background_rect.x += world_speed
+                        # Se o fundo saiu da janela, faz ele voltar para dentro.
+            if background_rect.right < 0:
+                background_rect.x += background_rect.width
+                # Desenha o fundo e uma cópia para a direita.
+                # Assumimos que a imagem selecionada ocupa pelo menos o tamanho da janela.
+                # Além disso, ela deve ser cíclica, ou seja, o lado esquerdo deve ser continuação do direito.
+                window.blit(background, background_rect)
+                # Desenhamos a imagem novamente, mas deslocada da largura da imagem em x.
+                background_rect2 = background_rect.copy()
+                background_rect2.x += background_rect2.width
+                window.blit(background, background_rect2)
+
+        all_sprites.update()
+    
 
         if state == PLAYING:
             hits = pygame.sprite.spritecollide(player, all_soros, True, pygame.sprite.collide_mask)
@@ -132,6 +137,9 @@ def game_screen(window):
                 state = PLAYING
                 player = Minion(groups, assets)
                 all_sprites.add(player)
+
+        all_sprites.draw(window)
+
 
         # Desenhando o score
         text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
