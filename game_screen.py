@@ -34,7 +34,7 @@ def game_screen(window):
         all_bananas.add(b)
     for i in range(3):
         # Criando os robôs
-        r = Robot(assets)
+        r = Robot(assets, HEIGHT-25, 100+50*i)
         all_sprites.add(r)
         all_robots.add(r)
 

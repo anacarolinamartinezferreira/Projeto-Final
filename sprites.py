@@ -32,26 +32,22 @@ class Minion(pygame.sprite.Sprite):
         self.image = self.assets[PURPLE_MINION_IMG]
 
 class Robot(pygame.sprite.Sprite):
-    def __init__(self, assets):
+    # Construtor da classe.
+    def __init__(self, assets, bottom, centerx):
+        # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
         self.image = assets[ROBOT_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0, WIDTH)
-        self.rect.y = 0
-        self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(2, 9)
 
-    def update(self):
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
-        # novas posições e velocidades
-        if self.rect.top > HEIGHT or self.rect.right < 0 or self.rect.left > WIDTH:
-            self.rect.x = random.randint(0, WIDTH)
-            self.rect.y = random.randint(0, 10)
-            self.speedx = random.randint(-3, 3)
-            self.speedy = random.randint(2, 9)
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.centerx = centerx
+        self.rect.bottom = bottom
+
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.bottom < 0:
+            self.kill()
 
 class Banana(pygame.sprite.Sprite):
     # Construtor da classe.
