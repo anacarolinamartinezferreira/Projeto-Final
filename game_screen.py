@@ -26,25 +26,48 @@ def game_screen(window):
     player = Minion(groups, assets)
     all_sprites.add(player)
     
-    # Posição inicial para a primeira banana
-    current_x = 200
+    # Posição inicial para a primeira banana e robôs (começando bem depois do Minion)
+    current_x = WIDTH + 200  # Começa uma tela depois do início
+    
+    # Lista para guardar posições ocupadas
+    posicoes_ocupadas = []
 
-    for i in range(10):
-        # Criando as bananas com espaçamento aleatório
-        b = Banana(assets, HEIGHT-25, current_x)
-        all_sprites.add(b)
-        all_bananas.add(b)
-        # Adiciona um espaçamento aleatório entre 50 e 150 pixels para a próxima banana
-        current_x += random.randint(50, WIDTH)
-
-    for i in range(3):
-        # Criando os robôs
-        r = Robot(assets, HEIGHT-25, 100+50*i)
+    # Primeiro criamos os robôs para que apareçam antes das bananas
+    for i in range(2):  # Reduzindo para apenas 2 robôs
+        # Criando os robôs com espaçamento menor
+        r = Robot(assets, HEIGHT-25, current_x)
         all_sprites.add(r)
         all_robots.add(r)
+        # Guarda a região ocupada pelo robô (considerando sua largura)
+        posicoes_ocupadas.append((current_x - 100, current_x + 100))  # 100 pixels de margem para cada lado
+        # Adiciona um espaçamento aleatório entre 500 e 800 pixels para o próximo robô
+        current_x += random.randint(500, 800)
+
+    # Agora criamos as bananas depois dos robôs
+    for i in range(10):
+        # Tenta encontrar uma posição válida para a banana
+        posicao_valida = False
+        while not posicao_valida:
+            # Verifica se a posição atual não está muito próxima de nenhum robô
+            posicao_valida = True
+            for inicio, fim in posicoes_ocupadas:
+                if inicio - 50 <= current_x <= fim + 50:  # 50 pixels de margem de segurança
+                    posicao_valida = False
+                    current_x += 100  # Move um pouco para frente e tenta de novo
+                    break
+        
+        # Escolhe aleatoriamente se a banana vai estar no chão ou no alto
+        altura_banana = random.choice([HEIGHT-25, HEIGHT-150])
+        # Criando as bananas com espaçamento aleatório
+        b = Banana(assets, altura_banana, current_x)
+        all_sprites.add(b)
+        all_bananas.add(b)
+        # Guarda a posição da banana
+        posicoes_ocupadas.append((current_x - 30, current_x + 30))  # 30 pixels de margem para cada lado
+        # Adiciona um espaçamento aleatório entre 50 e 150 pixels para a próxima banana
+        current_x += random.randint(50, 150)
 
     PLAYING = 0
-    EXPLODING = 1
     state = PLAYING
 
     keys_down = {}
@@ -82,11 +105,12 @@ def game_screen(window):
                     # Dependendo da tecla, altera a velocidade.
                     keys_down[event.key] = True
                     if event.key == pygame.K_RIGHT:
-                        moving=True
-                        b.speedx -= 8
+                        moving = True
                         # Faz todas as bananas se moverem em direção ao Minion
                         for banana in all_bananas:
-                            banana.speedx = -world_speed  # Inverte a direção para ir ao encontro do Minion
+                            banana.speedx = world_speed  # Inverte a direção para ir ao encontro do Minion
+                        for robos in all_robots:
+                            robos.speedx = world_speed
                     if event.key == pygame.K_UP and not pulo and not desce:
                         delta_ms = pygame.time.get_ticks() + 400
                         pulo = True 
@@ -97,11 +121,14 @@ def game_screen(window):
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
                             moving=False
-                            b.speedx += 8
                             player.image = assets[MINION_STILL_IMG]
+                            player.image.set_alpha(player.alpha)  # Mantém a opacidade atual
                             # Para o movimento das bananas quando o jogador para
                             for banana in all_bananas:
                                 banana.speedx = 0
+                            for robos in all_robots: 
+                                robos.speedx = 0
+
         if pygame.time.get_ticks() >  delta_ms and pulo:
             pulo = False
             desce = True
@@ -114,6 +141,7 @@ def game_screen(window):
 
         if moving==True:
             player.image = assets[MINION_RUN_IMG]
+            player.image.set_alpha(player.alpha)  # Mantém a opacidade atual
             background_rect.x += world_speed
             
         # Desenha o fundo principal
@@ -130,6 +158,35 @@ def game_screen(window):
 
         all_sprites.update()
     
+        # Verifica se há robôs que ficaram para trás e os recria à frente
+        for robo in all_robots:
+            if robo.rect.right < 0:  # Se o robô saiu completamente da tela pela esquerda
+                # Remove o robô antigo
+                robo.kill()
+                # Encontra a posição x mais distante entre todos os robôs existentes
+                novo_x = max([r.rect.centerx for r in all_robots]) + random.randint(500, 800) if all_robots else player.rect.centerx + WIDTH
+                # Cria um novo robô
+                r = Robot(assets, HEIGHT-25, novo_x)
+                if moving:
+                    r.speedx = world_speed
+                all_sprites.add(r)
+                all_robots.add(r)
+
+        # Verifica se há bananas que ficaram para trás e as recria à frente
+        for banana in all_bananas:
+            if banana.rect.right < 0:  # Se a banana saiu completamente da tela pela esquerda
+                # Remove a banana antiga
+                banana.kill()
+                # Escolhe uma altura aleatória para a nova banana
+                altura_banana = random.choice([HEIGHT-25, HEIGHT-150])
+                # Encontra a posição x mais distante entre todas as bananas existentes
+                novo_x = max([b.rect.centerx for b in all_bananas]) + random.randint(200, 400) if all_bananas else player.rect.centerx + WIDTH
+                # Cria uma nova banana
+                b = Banana(assets, altura_banana, novo_x)
+                if moving:
+                    b.speedx = world_speed
+                all_sprites.add(b)
+                all_bananas.add(b)
 
         if state == PLAYING:
             hits = pygame.sprite.spritecollide(player, all_soros, True, pygame.sprite.collide_mask)
@@ -141,11 +198,26 @@ def game_screen(window):
             # Verifica se houve colisão entre tiro e meteoro
             hits = pygame.sprite.spritecollide(player, all_bananas, True, pygame.sprite.collide_mask)
             for banana in hits:
-                # O meteoro e destruido e precisa ser recriado
-                b = Banana(assets, HEIGHT-25, banana.rect.centerx+100)
+                # Encontra uma posição válida para a nova banana
+                posicao_valida = False
+                novo_x = max([b.rect.centerx for b in all_bananas]) + random.randint(200, 400) if all_bananas else player.rect.centerx + WIDTH
+                
+                while not posicao_valida:
+                    posicao_valida = True
+                    # Verifica se há robôs próximos
+                    for robo in all_robots:
+                        if abs(robo.rect.centerx - novo_x) < 150:  # 150 pixels de distância mínima
+                            posicao_valida = False
+                            novo_x += 100
+                            break
+                
+                # Escolhe uma altura aleatória para a nova banana
+                altura_banana = random.choice([HEIGHT-25, HEIGHT-150])
+                # Cria a nova banana bem mais longe
+                b = Banana(assets, altura_banana, novo_x)
                 # Se o jogador estiver se movendo, a nova banana também deve se mover
                 if moving:
-                    b.speedx = -world_speed  # Inverte a direção para ir ao encontro do Minion
+                    b.speedx = world_speed
                 all_sprites.add(b)
                 all_bananas.add(b)
 
@@ -157,19 +229,33 @@ def game_screen(window):
 
             # Verifica se houve colisão entre minion e robô
             hits = pygame.sprite.spritecollide(player, all_robots, True, pygame.sprite.collide_mask)
-            if len(hits) > 0:
-                # Toca o som da colisão
-                player.kill()
-                lives -= 1
-                state = EXPLODING
-                keys_down = {}
-        elif state == EXPLODING:
-            if lives == 0:
-                state = GAME_OVER
-            else:
-                state = PLAYING
-                player = Minion(groups, assets)
-                all_sprites.add(player)
+            for robos in hits:
+                # Encontra uma posição válida para o novo robô
+                posicao_valida = False
+                novo_x = max([r.rect.centerx for r in all_robots]) + random.randint(500, 800) if all_robots else player.rect.centerx + WIDTH
+                
+                while not posicao_valida:
+                    posicao_valida = True
+                    # Verifica se há bananas próximas
+                    for banana in all_bananas:
+                        if abs(banana.rect.centerx - novo_x) < 150:  # 150 pixels de distância mínima
+                            posicao_valida = False
+                            novo_x += 100
+                            break
+                
+                # O robô é destruido e precisa ser recriado bem mais à frente
+                r = Robot(assets, HEIGHT-25, novo_x)
+                # Se o jogador estiver se movendo, o novo robô também deve se mover
+                if moving:
+                    r.speedx = world_speed
+                all_sprites.add(r)
+                all_robots.add(r)
+                
+                # Só toma dano se não estiver invencível
+                if player.tomar_dano():
+                    lives -= 1
+                    if lives == 0:
+                        state = GAME_OVER
 
         all_sprites.draw(window)
 
