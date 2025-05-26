@@ -114,17 +114,18 @@ def game_screen(window):
         if moving==True:
             player.image = assets[MINION_RUN_IMG]
             background_rect.x += world_speed
-                        # Se o fundo saiu da janela, faz ele voltar para dentro.
-            if background_rect.right < 0:
-                background_rect.x += background_rect.width
-                # Desenha o fundo e uma cópia para a direita.
-                # Assumimos que a imagem selecionada ocupa pelo menos o tamanho da janela.
-                # Além disso, ela deve ser cíclica, ou seja, o lado esquerdo deve ser continuação do direito.
-                window.blit(background, background_rect)
-                # Desenhamos a imagem novamente, mas deslocada da largura da imagem em x.
-                background_rect2 = background_rect.copy()
-                background_rect2.x += background_rect2.width
-                window.blit(background, background_rect2)
+            
+        # Desenha o fundo principal
+        window.blit(background, background_rect)
+        
+        # Cria e desenha uma cópia do fundo logo após o primeiro
+        background_rect2 = background_rect.copy()
+        background_rect2.x = background_rect.right
+        window.blit(background, background_rect2)
+        
+        # Se o fundo principal saiu completamente da tela, reseta sua posição
+        if background_rect.right <= 0:
+            background_rect.x = 0
 
         all_sprites.update()
     
