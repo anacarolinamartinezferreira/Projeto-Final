@@ -78,7 +78,6 @@ def game_screen(window):
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     background_rect = background.get_rect()
 
-    moving=False
     pulo = False
     desce =False
     delta_ms = 0
@@ -156,7 +155,7 @@ def game_screen(window):
             player.speedy = 0
 
 
-        if moving == True:
+        if player.moving:
             if player.is_purple:
                 player.image = assets[PURPLE_MINION_IMG]
             else:
@@ -214,7 +213,7 @@ def game_screen(window):
                 novo_x = max([s.rect.centerx for s in all_soros]) + random.randint(6000, 8000) if all_soros else player.rect.centerx + WIDTH + 6000
                 altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
                 s = Soro(assets, altura_soro, novo_x)
-                if moving:
+                if player.moving:
                     s.speedx = world_speed
                 all_sprites.add(s)
                 all_soros.add(s)
@@ -229,7 +228,7 @@ def game_screen(window):
                 novo_x = max([s.rect.centerx for s in all_soros]) + random.randint(6000, 8000) if all_soros else player.rect.centerx + WIDTH + 6000
                 altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
                 s = Soro(assets, altura_soro, novo_x)
-                if moving:
+                if player.moving:
                     s.speedx = world_speed
                 all_sprites.add(s)
                 all_soros.add(s)
@@ -282,7 +281,7 @@ def game_screen(window):
                 # O robô é destruido e precisa ser recriado bem mais à frente
                 r = Robot(assets, HEIGHT-25, novo_x)
                 # Se o jogador estiver se movendo, o novo robô também deve se mover
-                if moving:
+                if player.moving:
                     r.speedx = world_speed
                 all_sprites.add(r)
                 all_robots.add(r)
