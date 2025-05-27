@@ -34,22 +34,7 @@ def game_screen(window):
     # Lista para guardar posições ocupadas
     posicoes_ocupadas = []
 
-    # Criando soros primeiro
-    for i in range(1):  # Apenas 1 soro
-        altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
-        s = Soro(assets, altura_soro, current_x)
-        all_sprites.add(s)
-        all_soros.add(s)
-        current_x += random.randint(1500, 2000)  # Espaçamento muito maior
-
-    # Criando robôs
-    for i in range(2):
-        r = Robot(assets, HEIGHT-25, current_x)
-        all_sprites.add(r)
-        all_robots.add(r)
-        current_x += random.randint(500, 800)
-
-    # Criando bananas
+    # Criando bananas primeiro
     for i in range(10):
         posicao_valida = False
         while not posicao_valida:
@@ -65,7 +50,21 @@ def game_screen(window):
         all_sprites.add(b)
         all_bananas.add(b)
         current_x += random.randint(50, 150)
-    
+
+    # Criando robôs depois das bananas
+    for i in range(2):
+        r = Robot(assets, HEIGHT-25, current_x)
+        all_sprites.add(r)
+        all_robots.add(r)
+        current_x += random.randint(500, 800)
+
+    # Criando soro por último e bem mais longe
+    for i in range(1):  # Apenas 1 soro
+        altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
+        s = Soro(assets, altura_soro, current_x + 2000)  # Começa muito mais à frente, após bananas e robôs
+        all_sprites.add(s)
+        all_soros.add(s)
+
     PLAYING = 0
     state = PLAYING
 
@@ -108,6 +107,7 @@ def game_screen(window):
                     keys_down[event.key] = True
                     if event.key == pygame.K_RIGHT:
                         moving = True
+                        player.moving = True
                         # Faz todas as bananas se moverem 
                         for banana in all_bananas:
                             banana.speedx = world_speed 
@@ -127,8 +127,12 @@ def game_screen(window):
                     # Dependendo da tecla, altera o estado de movimento
                     if event.key in keys_down and keys_down[event.key]:
                         if event.key == pygame.K_RIGHT:
-                            moving=False
-                            player.image = assets[MINION_STILL_IMG]
+                            moving = False
+                            player.moving = False
+                            if player.is_purple:
+                                player.image = assets[PURPLE_MINION_IMG]
+                            else:
+                                player.image = assets[MINION_STILL_IMG]
                             player.image.set_alpha(player.alpha)
                             # Para o movimento das bananas quando o jogador para
                             for banana in all_bananas:
@@ -152,8 +156,11 @@ def game_screen(window):
             player.speedy = 0
 
 
-        if moving==True:
-            player.image = assets[MINION_RUN_IMG]
+        if moving == True:
+            if player.is_purple:
+                player.image = assets[PURPLE_MINION_IMG]
+            else:
+                player.image = assets[MINION_RUN_IMG]
             player.image.set_alpha(player.alpha)  # Mantém a opacidade atual
             background_rect.x += world_speed
             
@@ -203,8 +210,8 @@ def game_screen(window):
         for soro in all_soros:
             if soro.rect.right < 0:  # Se o soro saiu completamente da tela pela esquerda
                 soro.kill()
-                # Encontra a posição x mais distante entre todos os soros existentes
-                novo_x = max([s.rect.centerx for s in all_soros]) + random.randint(1500, 2000) if all_soros else player.rect.centerx + WIDTH
+                # Encontra a posição x mais distante entre todos os soros existentes e adiciona uma distância muito maior
+                novo_x = max([s.rect.centerx for s in all_soros]) + random.randint(6000, 8000) if all_soros else player.rect.centerx + WIDTH + 6000
                 altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
                 s = Soro(assets, altura_soro, novo_x)
                 if moving:
@@ -216,11 +223,10 @@ def game_screen(window):
             # Verifica colisão com soro
             hits = pygame.sprite.spritecollide(player, all_soros, True, pygame.sprite.collide_mask)
             for soro in hits:
-                player.image = assets[PURPLE_MINION_IMG]
-                player.image.set_alpha(player.alpha)
+                player.turn_purple()
                 
-                # Cria um novo soro mais à frente
-                novo_x = max([s.rect.centerx for s in all_soros]) + random.randint(1500, 2000) if all_soros else player.rect.centerx + WIDTH
+                # Cria um novo soro muito mais à frente
+                novo_x = max([s.rect.centerx for s in all_soros]) + random.randint(6000, 8000) if all_soros else player.rect.centerx + WIDTH + 6000
                 altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
                 s = Soro(assets, altura_soro, novo_x)
                 if moving:
@@ -253,10 +259,10 @@ def game_screen(window):
                 all_bananas.add(b)
 
                 # Ganhou pontos!
-                if player.image == assets[MINION_STILL_IMG] or player.image == assets[MINION_RUN_IMG]:
-                    score += 1
-                elif player.image == assets[PURPLE_MINION_IMG]:
+                if player.is_purple:  # Se estiver com o poder do minion roxo
                     score += 2
+                else:  # Se estiver normal
+                    score += 1
 
             # Verifica se houve colisão entre minion e robô
             hits = pygame.sprite.spritecollide(player, all_robots, True, pygame.sprite.collide_mask)

@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import WIDTH, HEIGHT
-from assets import MINION_STILL_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG
+from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG
 
 
 class Minion(pygame.sprite.Sprite):
@@ -23,6 +23,14 @@ class Minion(pygame.sprite.Sprite):
         self.ultimo_dano = 0
         self.tempo_invencivel = 2000  # 2 segundos de invencibilidade
         self.alpha = 255  # Controle de transparência
+
+        # Atributos para controle do poder do minion roxo
+        self.is_purple = False
+        self.purple_start_time = 0
+        self.purple_duration = 7000  # 7 segundos de duração
+        
+        # Controle de movimento
+        self.moving = False
 
         # Mantem dentro da tela
         if self.rect.right > WIDTH:
@@ -49,6 +57,17 @@ class Minion(pygame.sprite.Sprite):
             self.alpha = 255
             self.image.set_alpha(self.alpha)
 
+        # Atualiza estado do minion roxo
+        if self.is_purple:
+            tempo_atual = pygame.time.get_ticks()
+            if tempo_atual - self.purple_start_time > self.purple_duration:
+                self.is_purple = False
+                if not self.moving:  # Se não estiver se movendo
+                    self.image = self.assets[MINION_STILL_IMG]
+                else:  # Se estiver se movendo
+                    self.image = self.assets[MINION_RUN_IMG]
+                self.image.set_alpha(self.alpha)
+
     def tomar_dano(self):
         if not self.invencivel:
             self.invencivel = True
@@ -56,9 +75,10 @@ class Minion(pygame.sprite.Sprite):
             return True
         return False
     
-    def purple(self):
+    def turn_purple(self):
+        self.is_purple = True
+        self.purple_start_time = pygame.time.get_ticks()
         self.image = self.assets[PURPLE_MINION_IMG]
-        # Mantém a opacidade atual ao trocar de imagem
         self.image.set_alpha(self.alpha)
 
 class Robot(pygame.sprite.Sprite):
