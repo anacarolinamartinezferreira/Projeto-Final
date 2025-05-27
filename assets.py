@@ -17,6 +17,8 @@ BANANA_IMG = 'banana_img'
 FLOOR_IMG = 'floor_img'
 SCORE_FONT = 'score_font'
 GAME_OVER_SOUND = 'game_over_sound'
+DYING_ANIMATION = 'perde_vida.anim'
+
 
 def load_assets():
     assets = {}
@@ -40,6 +42,7 @@ def load_assets():
     assets['banana_img'] = pygame.transform.scale(assets['banana_img'],(BANANA_WIDTH, BANANA_HEIGHT))
     assets['floor_img'] = pygame.image.load(os.path.join(IMG_DIR,'floor.png')).convert_alpha()
     assets[SCORE_FONT] = pygame.font.Font(os.path.join(FNT_DIR, 'PressStart2P-Regular.ttf'), 28)
+    assets['perde_vida.anim'] = pygame.image.load(os.path.join(IMG_DIR,'perde_vida.anim.png')).convert()
 
     pygame.mixer.music.load(os.path.join(SND_DIR,'relaxing-guitar-loop-v5-245859.mp3'))
     assets[GAME_OVER_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'gameover_snd.mp3'))
