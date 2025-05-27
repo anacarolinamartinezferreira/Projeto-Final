@@ -34,39 +34,38 @@ def game_screen(window):
     # Lista para guardar posições ocupadas
     posicoes_ocupadas = []
 
+    # Criando soros primeiro
+    for i in range(1):  # Apenas 1 soro
+        altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
+        s = Soro(assets, altura_soro, current_x)
+        all_sprites.add(s)
+        all_soros.add(s)
+        current_x += random.randint(1500, 2000)  # Espaçamento muito maior
+
     # Criando robôs
     for i in range(2):
         r = Robot(assets, HEIGHT-25, current_x)
         all_sprites.add(r)
         all_robots.add(r)
-        # Guarda a região ocupada pelo robô (considerando sua largura)
-        posicoes_ocupadas.append((current_x - 100, current_x + 100))  # 100 pixels de margem para cada lado
-        # Adiciona um espaçamento aleatório entre 500 e 800 pixels para o próximo robô
         current_x += random.randint(500, 800)
 
     # Criando bananas
     for i in range(10):
         posicao_valida = False
         while not posicao_valida:
-            # Verifica se a posição atual não está muito próxima de nenhum robô
             posicao_valida = True
             for inicio, fim in posicoes_ocupadas:
-                if inicio - 50 <= current_x <= fim + 50:  # 50 pixels de margem de segurança
+                if inicio - 50 <= current_x <= fim + 50:
                     posicao_valida = False
-                    current_x += 100  # Move um pouco para frente e tenta de novo
+                    current_x += 100
                     break
         
-        # Escolhe aleatoriamente se a banana vai estar no chão ou no alto
-        altura_banana = random.choice([HEIGHT-25, HEIGHT-150])
-        # Criando as bananas com espaçamento aleatório
+        altura_banana = random.choice([HEIGHT-25,HEIGHT-150])
         b = Banana(assets, altura_banana, current_x)
         all_sprites.add(b)
         all_bananas.add(b)
-        # Guarda a posição da banana
-        posicoes_ocupadas.append((current_x - 30, current_x + 30))  # 30 pixels de margem para cada lado
-        # Adiciona um espaçamento aleatório entre 50 e 150 pixels para a próxima banana
         current_x += random.randint(50, 150)
-
+    
     PLAYING = 0
     state = PLAYING
 
@@ -115,6 +114,9 @@ def game_screen(window):
                         # Faz todos os robôs se moverem
                         for robos in all_robots:
                             robos.speedx = world_speed
+                        # Faz todos os soros se moverem 
+                        for soro in all_soros:
+                            soro.speedx = world_speed
                     if event.key == pygame.K_UP and not pulo and not desce:
                         delta_ms = pygame.time.get_ticks() + 400
                         pulo = True # Incia o pulo
@@ -127,13 +129,16 @@ def game_screen(window):
                         if event.key == pygame.K_RIGHT:
                             moving=False
                             player.image = assets[MINION_STILL_IMG]
-                            player.image.set_alpha(player.alpha)  # Mantém a opacidade atual
+                            player.image.set_alpha(player.alpha)
                             # Para o movimento das bananas quando o jogador para
                             for banana in all_bananas:
                                 banana.speedx = 0
-                            # Para o movimento dos robôs qunado o jogador para
+                            # Para o movimento dos robôs quando o jogador para
                             for robos in all_robots: 
                                 robos.speedx = 0
+                            # Para o movimento dos soros quando o jogador para 
+                            for soro in all_soros:
+                                soro.speedx = 0
         
         # Fazendo o minion pular e, em seguida, descer
         if pygame.time.get_ticks() >  delta_ms and pulo:
@@ -183,21 +188,43 @@ def game_screen(window):
                 # Remove a banana antiga
                 banana.kill()
                 # Escolhe uma altura aleatória para a nova banana
-                altura_banana = random.choice([HEIGHT-25, HEIGHT-150])
+                altura_banana = random.choice([HEIGHT-25,HEIGHT-150])
                 # Encontra a posição x mais distante entre todas as bananas existentes
                 novo_x = max([b.rect.centerx for b in all_bananas]) + random.randint(200, 400) if all_bananas else player.rect.centerx + WIDTH
                 # Cria uma nova banana
                 b = Banana(assets, altura_banana, novo_x)
+                # Se o jogador estiver se movendo, a nova banana também deve se mover
                 if moving:
                     b.speedx = world_speed
                 all_sprites.add(b)
                 all_bananas.add(b)
 
+        # Verifica se há soros que ficaram para trás e os recria à frente
+        for soro in all_soros:
+            if soro.rect.right < 0:  # Se o soro saiu completamente da tela pela esquerda
+                soro.kill()
+                # Encontra a posição x mais distante entre todos os soros existentes
+                novo_x = max([s.rect.centerx for s in all_soros]) + random.randint(1500, 2000) if all_soros else player.rect.centerx + WIDTH
+                altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
+                s = Soro(assets, altura_soro, novo_x)
+                if moving:
+                    s.speedx = world_speed
+                all_sprites.add(s)
+                all_soros.add(s)
+
         if state == PLAYING:
+            # Verifica colisão com soro
             hits = pygame.sprite.spritecollide(player, all_soros, True, pygame.sprite.collide_mask)
             for soro in hits:
-                player.image = assets[PURPLE_MINION_IMG] 
-                s = Soro(assets)
+                player.image = assets[PURPLE_MINION_IMG]
+                player.image.set_alpha(player.alpha)
+                
+                # Cria um novo soro mais à frente
+                novo_x = max([s.rect.centerx for s in all_soros]) + random.randint(1500, 2000) if all_soros else player.rect.centerx + WIDTH
+                altura_soro = random.choice([HEIGHT-25, HEIGHT-150])
+                s = Soro(assets, altura_soro, novo_x)
+                if moving:
+                    s.speedx = world_speed
                 all_sprites.add(s)
                 all_soros.add(s)
             

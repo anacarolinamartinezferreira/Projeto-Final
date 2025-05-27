@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import WIDTH, HEIGHT
-from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG
+from assets import MINION_STILL_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG
 
 
 class Minion(pygame.sprite.Sprite):
@@ -111,6 +111,7 @@ class Banana(pygame.sprite.Sprite):
         self.rect.y += self.speedy
 
 class Soro(pygame.sprite.Sprite):
+    # Construtor da classe.
     def __init__(self, assets, bottom, centerx):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
@@ -122,8 +123,14 @@ class Soro(pygame.sprite.Sprite):
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centerx = centerx
         self.rect.bottom = bottom
-        self.speedx = 0 
+        self.speedx = 0
+        self.speedy = 0
 
-        # Se o soro passar do inicio da tela, morre.
+        # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
+
+    def update(self):
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+

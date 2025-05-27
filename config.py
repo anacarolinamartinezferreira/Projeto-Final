@@ -15,6 +15,8 @@ BANANA_WIDTH = 110
 BANANA_HEIGHT = 60
 ROBOT_WIDTH = 200
 ROBOT_HEIGHT = 100
+SORO_WIDTH = 80
+SORO_HEIGHT = 80
 
 # Define algumas variáveis com as cores básicas
 WHITE = (255, 255, 255)

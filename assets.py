@@ -1,7 +1,7 @@
 import pygame
 pygame.display.init()
 import os 
-from config import IMG_DIR, SND_DIR,FNT_DIR, WIDTH, HEIGHT, MINION_WIDTH, MINION_HEIGHT, BANANA_WIDTH, BANANA_HEIGHT, ROBOT_WIDTH, ROBOT_HEIGHT
+from config import IMG_DIR, SND_DIR,FNT_DIR, WIDTH, HEIGHT, MINION_WIDTH, MINION_HEIGHT, BANANA_WIDTH, BANANA_HEIGHT, ROBOT_WIDTH, ROBOT_HEIGHT, SORO_WIDTH, SORO_HEIGHT
 
 BACKGROUND = 'background'
 ROBOT_IMG = 'robot_img'
@@ -34,6 +34,7 @@ def load_assets():
     assets['up_img'] = pygame.image.load(os.path.join(IMG_DIR,'cima.png')).convert_alpha()
     assets['unicorn_img'] = pygame.image.load(os.path.join(IMG_DIR,'unicorn.png')).convert_alpha()
     assets['soro_img'] = pygame.image.load(os.path.join(IMG_DIR,'soro.png')).convert_alpha()
+    assets['soro_img'] = pygame.transform.scale(assets['soro_img'],(SORO_WIDTH, SORO_HEIGHT))
     assets['raio_img'] = pygame.image.load(os.path.join(IMG_DIR,'raio.png')).convert_alpha()
     assets['banana_img'] = pygame.image.load(os.path.join(IMG_DIR,'banana.png')).convert_alpha()
     assets['banana_img'] = pygame.transform.scale(assets['banana_img'],(BANANA_WIDTH, BANANA_HEIGHT))
