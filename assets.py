@@ -22,6 +22,7 @@ SCORE_ANIMATION = 'score_anim'
 SCORE_2_ANIMATION = 'score_2_anim'
 BANANA_SOUND = 'banana_sound'
 PURPLE_TRANSFORM_SOUND = 'purple_transform_sound'
+PURPLE_EXPLOSION = 'purple_explosion'
 
 
 def load_assets():
@@ -74,6 +75,20 @@ def load_assets():
             else:
                 alpha_img_2.set_at((x, y), color)  # Keep original color
     assets[SCORE_2_ANIMATION] = pygame.transform.scale(alpha_img_2, (100, 100))  # Mesmo tamanho da animação +1
+
+    # Load purple explosion animation with transparency
+    explosion_img = pygame.image.load(os.path.join(IMG_DIR,'explosão_roxa.png')).convert_alpha()
+    # Create a copy with per-pixel alpha
+    alpha_explosion = pygame.Surface(explosion_img.get_size(), pygame.SRCALPHA)
+    # For each pixel, if it's light colored (close to white) or black, make it transparent
+    for x in range(explosion_img.get_width()):
+        for y in range(explosion_img.get_height()):
+            color = explosion_img.get_at((x, y))
+            if (color[0] > 200 and color[1] > 200 and color[2] > 200) or (color[0] < 30 and color[1] < 30 and color[2] < 30):
+                alpha_explosion.set_at((x, y), (0, 0, 0, 0))  # Fully transparent
+            else:
+                alpha_explosion.set_at((x, y), color)  # Keep original color
+    assets[PURPLE_EXPLOSION] = pygame.transform.scale(alpha_explosion, (200, 200))  # Tamanho maior para a explosão
 
     # Carrega os sons do jogo
     pygame.mixer.music.load(os.path.join(SND_DIR,'relaxing-guitar-loop-v5-245859.mp3'))

@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import WIDTH, HEIGHT
-from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION, SCORE_2_ANIMATION, PURPLE_TRANSFORM_SOUND
+from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION, SCORE_2_ANIMATION, PURPLE_TRANSFORM_SOUND, PURPLE_EXPLOSION
 
 
 class Minion(pygame.sprite.Sprite):
@@ -43,6 +43,11 @@ class Minion(pygame.sprite.Sprite):
         self.scoring_duration = 100  # 0.1 segundos de animação
         self.scoring_type = SCORE_ANIMATION  # Tipo de animação de pontuação
 
+        # Controle da animação de explosão roxa
+        self.exploding = False
+        self.exploding_start = 0
+        self.exploding_duration = 200  # 0.2 segundos de animação
+
         # Mantem dentro da tela
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
@@ -63,6 +68,11 @@ class Minion(pygame.sprite.Sprite):
         if self.scoring:
             if tempo_atual - self.scoring_start > self.scoring_duration:
                 self.scoring = False
+
+        # Atualiza animação de explosão roxa
+        if self.exploding:
+            if tempo_atual - self.exploding_start > self.exploding_duration:
+                self.exploding = False
         
         # Atualiza invencibilidade
         if self.invencivel:
@@ -109,6 +119,8 @@ class Minion(pygame.sprite.Sprite):
         self.image = self.assets[PURPLE_MINION_IMG]
         self.image.set_alpha(self.alpha)
         self.assets[PURPLE_TRANSFORM_SOUND].play()  # Toca o som de transformação
+        self.exploding = True  # Inicia a animação de explosão
+        self.exploding_start = pygame.time.get_ticks()  # Marca o início da animação
 
 class Robot(pygame.sprite.Sprite):
     # Construtor da classe.

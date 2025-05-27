@@ -1,7 +1,7 @@
 import pygame
 import random
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER, INFO, INIT, GAME
-from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND, DYING_ANIMATION, SCORE_ANIMATION, BANANA_SOUND
+from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND, DYING_ANIMATION, SCORE_ANIMATION, BANANA_SOUND, PURPLE_EXPLOSION
 from sprites import Minion,Robot,Banana,Soro
 
 world_speed=-10 # Velocidade que a tela moverá
@@ -331,6 +331,14 @@ def game_screen(window):
             score_rect.centerx = player.rect.centerx
             score_rect.bottom = player.rect.top - 10  # 10 pixels acima do jogador
             window.blit(score_anim, score_rect)
+
+        # Desenha a animação de explosão roxa se o jogador acabou de se transformar
+        if player.exploding:
+            explosion_anim = assets[PURPLE_EXPLOSION]
+            explosion_rect = explosion_anim.get_rect()
+            # Posiciona a explosão centralizada no jogador
+            explosion_rect.center = player.rect.center
+            window.blit(explosion_anim, explosion_rect)
 
         pygame.display.update()  # Mostra o novo frame para o jogador
     
