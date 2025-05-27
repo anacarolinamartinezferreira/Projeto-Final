@@ -1,7 +1,7 @@
 import pygame
 import random
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER, INFO, INIT, GAME
-from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND
+from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND, DYING_ANIMATION
 from sprites import Minion,Robot,Banana,Soro
 
 world_speed=-10 # Velocidade que a tela moverá
@@ -297,8 +297,8 @@ def game_screen(window):
                             high_score = score
                         return state, score, high_score
 
+        # Depois de desenhar tudo, inverte o display
         all_sprites.draw(window)
-
 
         # Desenhando o score
         text_surface = assets[SCORE_FONT].render("{:08d}".format(score), True, YELLOW)
@@ -311,6 +311,15 @@ def game_screen(window):
         text_rect = text_surface.get_rect()
         text_rect.bottomleft = (10, HEIGHT - 10)
         window.blit(text_surface, text_rect)
+
+        # Desenha a animação de morte se o jogador estiver morrendo
+        if player.dying:
+            death_anim = assets[DYING_ANIMATION]
+            death_rect = death_anim.get_rect()
+            # Posiciona a animação acima do jogador
+            death_rect.centerx = player.rect.centerx
+            death_rect.bottom = player.rect.top - 10  # 10 pixels acima do jogador
+            window.blit(death_anim, death_rect)
 
         pygame.display.update()  # Mostra o novo frame para o jogador
     

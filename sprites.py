@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import WIDTH, HEIGHT
-from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG
+from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION
 
 
 class Minion(pygame.sprite.Sprite):
@@ -32,6 +32,11 @@ class Minion(pygame.sprite.Sprite):
         # Controle de movimento
         self.moving = False
 
+        # Controle da animação de morte
+        self.dying = False
+        self.dying_start = 0
+        self.dying_duration = 700  # 0.7 segundos de animação
+
         # Mantem dentro da tela
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
@@ -41,9 +46,16 @@ class Minion(pygame.sprite.Sprite):
     def update(self):
         self.rect.y += self.speedy
         
+        tempo_atual = pygame.time.get_ticks()
+
+        # Atualiza animação de morte
+        if self.dying:
+            if tempo_atual - self.dying_start > self.dying_duration:
+                self.dying = False
+            return  # Não atualiza outros estados durante a animação de morte
+        
         # Atualiza invencibilidade
         if self.invencivel:
-            tempo_atual = pygame.time.get_ticks()
             if tempo_atual - self.ultimo_dano > self.tempo_invencivel:
                 self.invencivel = False
                 self.alpha = 255
@@ -59,7 +71,6 @@ class Minion(pygame.sprite.Sprite):
 
         # Atualiza estado do minion roxo
         if self.is_purple:
-            tempo_atual = pygame.time.get_ticks()
             if tempo_atual - self.purple_start_time > self.purple_duration:
                 self.is_purple = False
                 if not self.moving:  # Se não estiver se movendo
@@ -72,6 +83,8 @@ class Minion(pygame.sprite.Sprite):
         if not self.invencivel:
             self.invencivel = True
             self.ultimo_dano = pygame.time.get_ticks()
+            self.dying = True
+            self.dying_start = pygame.time.get_ticks()
             return True
         return False
     
