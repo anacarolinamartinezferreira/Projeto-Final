@@ -12,4 +12,6 @@ Durante o jogo, você terá 3 vidas. Se for atingido por um robô do Vector, per
 
 Para executar o programa do jogo, execute o arquivo jogo.py
 
+Vídeo do jogo funcionando: https://youtu.be/nTStf1p_mGM?si=ftMnDGQ5eaWJDjAV 
+
 * as imagens de fundo e dos componentes desse jogo foram criadas usando a ferramenta de IA “Chat GPT"
