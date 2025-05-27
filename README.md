@@ -10,6 +10,6 @@ Para começar a jogar, pressione “enter”. Para mais informações e instruç
 
 Durante o jogo, você terá 3 vidas. Se for atingido por um robô do Vector, perde uma delas. O soro roxo te transforma em um Minion Roxo durante 7 segundos, o que dobra o valor das bananas durante esse período. Colete o máximo de pontos e não perca vidas! 
 
-Para executar o programa do jogo, rode o arquivo jogo.py
+Para executar o programa do jogo, execute o arquivo jogo.py
 
-* as imagens de fundo e dos componentes desse jogo foram criadas usando a ferramenta de IA “Chat GPT”
+* as imagens de fundo e dos componentes desse jogo foram criadas usando a ferramenta de IA “Chat GPT"

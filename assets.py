@@ -44,29 +44,27 @@ def load_assets():
     assets['banana_img'] = pygame.transform.scale(assets['banana_img'],(BANANA_WIDTH, BANANA_HEIGHT))
     assets[SCORE_FONT] = pygame.font.Font(os.path.join(FNT_DIR, 'PressStart2P-Regular.ttf'), 28)
     
-    # Load death animation with transparency and scale it down
+    # Animação de perda de vida com transparência
     assets[DYING_ANIMATION] = pygame.image.load(os.path.join(IMG_DIR,'perde_vida.anim.png')).convert_alpha()
-    assets[DYING_ANIMATION] = pygame.transform.scale(assets[DYING_ANIMATION], (100, 100))  # Make it smaller, adjust size as needed
+    assets[DYING_ANIMATION] = pygame.transform.scale(assets[DYING_ANIMATION], (100, 100))  # Diminue
 
-    # Load score animation with transparency
+    # Animação de mais um ponto com transparência
     score_img = pygame.image.load(os.path.join(IMG_DIR,'ganha_ponto.png')).convert_alpha()
-    # Create a copy with per-pixel alpha
     alpha_img = pygame.Surface(score_img.get_size(), pygame.SRCALPHA)
-    # For each pixel, if it's light colored (close to white), make it transparent
+    # Se o pixel for perto de branco, vira transparente
     for x in range(score_img.get_width()):
         for y in range(score_img.get_height()):
             color = score_img.get_at((x, y))
-            if color[0] > 200 and color[1] > 200 and color[2] > 200:  # If it's close to white
-                alpha_img.set_at((x, y), (0, 0, 0, 0))  # Fully transparent
+            if color[0] > 200 and color[1] > 200 and color[2] > 200:  # Se for perto de branco
+                alpha_img.set_at((x, y), (0, 0, 0, 0))  # Deixar transparente
             else:
-                alpha_img.set_at((x, y), color)  # Keep original color
-    assets[SCORE_ANIMATION] = pygame.transform.scale(alpha_img, (100, 100))  # Scale after processing
+                alpha_img.set_at((x, y), color)  # Manter a cor 
+    assets[SCORE_ANIMATION] = pygame.transform.scale(alpha_img, (100, 100))  # Escala depois de processar
 
-    # Load score 2 animation with transparency
+    # Animação de mais dois pontos com transparência
     score_2_img = pygame.image.load(os.path.join(IMG_DIR,'ganha_2pontos.png')).convert_alpha()
-    # Create a copy with per-pixel alpha
     alpha_img_2 = pygame.Surface(score_2_img.get_size(), pygame.SRCALPHA)
-    # For each pixel, if it's light colored (close to white) or black, make it transparent
+    # Se o pixel for branco, claro ou preto, deixe transparente
     for x in range(score_2_img.get_width()):
         for y in range(score_2_img.get_height()):
             color = score_2_img.get_at((x, y))
@@ -74,21 +72,20 @@ def load_assets():
             if (color[0] > 200 and color[1] > 200 and color[2] > 200) or (color[0] < 30 and color[1] < 30 and color[2] < 30):
                 alpha_img_2.set_at((x, y), (0, 0, 0, 0))  # Fully transparent
             else:
-                alpha_img_2.set_at((x, y), color)  # Keep original color
+                alpha_img_2.set_at((x, y), color)  # Manter cor original
     assets[SCORE_2_ANIMATION] = pygame.transform.scale(alpha_img_2, (100, 100))  # Mesmo tamanho da animação +1
 
-    # Load purple explosion animation with transparency
+    # Explosão roxa com transparência
     explosion_img = pygame.image.load(os.path.join(IMG_DIR,'explosão_roxa.png')).convert_alpha()
-    # Create a copy with per-pixel alpha
     alpha_explosion = pygame.Surface(explosion_img.get_size(), pygame.SRCALPHA)
-    # For each pixel, if it's light colored (close to white) or black, make it transparent
+    # Se o pixel for branco, claro ou preto, deixe transparente
     for x in range(explosion_img.get_width()):
         for y in range(explosion_img.get_height()):
             color = explosion_img.get_at((x, y))
             if (color[0] > 200 and color[1] > 200 and color[2] > 200) or (color[0] < 30 and color[1] < 30 and color[2] < 30):
-                alpha_explosion.set_at((x, y), (0, 0, 0, 0))  # Fully transparent
+                alpha_explosion.set_at((x, y), (0, 0, 0, 0))  # Deixar transparente
             else:
-                alpha_explosion.set_at((x, y), color)  # Keep original color
+                alpha_explosion.set_at((x, y), color)  # Manter cor original
     assets[PURPLE_EXPLOSION] = pygame.transform.scale(alpha_explosion, (200, 200))  # Tamanho maior para a explosão
 
     # Carrega os sons do jogo
