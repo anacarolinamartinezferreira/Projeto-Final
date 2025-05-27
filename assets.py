@@ -32,15 +32,10 @@ def load_assets():
     assets['minion_run_img'] = pygame.transform.scale(assets['minion_run_img'],(MINION_WIDTH, MINION_HEIGHT))
     assets['purple_minion_img'] = pygame.image.load(os.path.join(IMG_DIR,'purple_minion.png')).convert_alpha()
     assets['purple_minion_img'] = pygame.transform.scale(assets['purple_minion_img'],(MINION_WIDTH, MINION_HEIGHT))
-    assets['down_img'] = pygame.image.load(os.path.join(IMG_DIR,'embaixo.png')).convert_alpha()
-    assets['up_img'] = pygame.image.load(os.path.join(IMG_DIR,'cima.png')).convert_alpha()
-    assets['unicorn_img'] = pygame.image.load(os.path.join(IMG_DIR,'unicorn.png')).convert_alpha()
     assets['soro_img'] = pygame.image.load(os.path.join(IMG_DIR,'soro.png')).convert_alpha()
     assets['soro_img'] = pygame.transform.scale(assets['soro_img'],(SORO_WIDTH, SORO_HEIGHT))
-    assets['raio_img'] = pygame.image.load(os.path.join(IMG_DIR,'raio.png')).convert_alpha()
     assets['banana_img'] = pygame.image.load(os.path.join(IMG_DIR,'banana.png')).convert_alpha()
     assets['banana_img'] = pygame.transform.scale(assets['banana_img'],(BANANA_WIDTH, BANANA_HEIGHT))
-    assets['floor_img'] = pygame.image.load(os.path.join(IMG_DIR,'floor.png')).convert_alpha()
     assets[SCORE_FONT] = pygame.font.Font(os.path.join(FNT_DIR, 'PressStart2P-Regular.ttf'), 28)
     
     # Load death animation with transparency and scale it down
