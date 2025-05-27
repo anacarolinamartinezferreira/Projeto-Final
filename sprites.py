@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import WIDTH, HEIGHT
-from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION, SCORE_2_ANIMATION
+from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION, SCORE_2_ANIMATION, PURPLE_TRANSFORM_SOUND
 
 
 class Minion(pygame.sprite.Sprite):
@@ -108,6 +108,7 @@ class Minion(pygame.sprite.Sprite):
         self.purple_start_time = pygame.time.get_ticks()
         self.image = self.assets[PURPLE_MINION_IMG]
         self.image.set_alpha(self.alpha)
+        self.assets[PURPLE_TRANSFORM_SOUND].play()  # Toca o som de transformação
 
 class Robot(pygame.sprite.Sprite):
     # Construtor da classe.

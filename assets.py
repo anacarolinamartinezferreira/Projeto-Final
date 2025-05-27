@@ -21,6 +21,7 @@ DYING_ANIMATION = 'perde_vida.anim'
 SCORE_ANIMATION = 'score_anim'
 SCORE_2_ANIMATION = 'score_2_anim'
 BANANA_SOUND = 'banana_sound'
+PURPLE_TRANSFORM_SOUND = 'purple_transform_sound'
 
 
 def load_assets():
@@ -77,6 +78,7 @@ def load_assets():
     # Carrega os sons do jogo
     pygame.mixer.music.load(os.path.join(SND_DIR,'relaxing-guitar-loop-v5-245859.mp3'))
     assets[GAME_OVER_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'gameover_snd.mp3'))
-    assets[BANANA_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'bana_snd.mp3'))  # Carrega o som da banana
+    assets[BANANA_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'bana_snd.mp3'))
+    assets[PURPLE_TRANSFORM_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'purple_minion.mp3'))
     pygame.mixer.music.set_volume(0.4)
     return assets
