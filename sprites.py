@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import WIDTH, HEIGHT
-from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION
+from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION
 
 
 class Minion(pygame.sprite.Sprite):
@@ -37,6 +37,11 @@ class Minion(pygame.sprite.Sprite):
         self.dying_start = 0
         self.dying_duration = 700  # 0.7 segundos de animação
 
+        # Controle da animação de pontuação
+        self.scoring = False
+        self.scoring_start = 0
+        self.scoring_duration = 100  # 0.1 segundos de animação
+
         # Mantem dentro da tela
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
@@ -52,7 +57,11 @@ class Minion(pygame.sprite.Sprite):
         if self.dying:
             if tempo_atual - self.dying_start > self.dying_duration:
                 self.dying = False
-            return  # Não atualiza outros estados durante a animação de morte
+
+        # Atualiza animação de pontuação
+        if self.scoring:
+            if tempo_atual - self.scoring_start > self.scoring_duration:
+                self.scoring = False
         
         # Atualiza invencibilidade
         if self.invencivel:
@@ -78,6 +87,10 @@ class Minion(pygame.sprite.Sprite):
                 else:  # Se estiver se movendo
                     self.image = self.assets[MINION_RUN_IMG]
                 self.image.set_alpha(self.alpha)
+
+    def score_point(self):
+        self.scoring = True
+        self.scoring_start = pygame.time.get_ticks()
 
     def tomar_dano(self):
         if not self.invencivel:

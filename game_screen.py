@@ -1,7 +1,7 @@
 import pygame
 import random
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER, INFO, INIT, GAME
-from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND, DYING_ANIMATION
+from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND, DYING_ANIMATION, SCORE_ANIMATION
 from sprites import Minion,Robot,Banana,Soro
 
 world_speed=-10 # Velocidade que a tela moverá
@@ -262,6 +262,7 @@ def game_screen(window):
                     score += 2
                 else:  # Se estiver normal
                     score += 1
+                player.score_point()  # Trigger scoring animation
 
             # Verifica se houve colisão entre minion e robô
             hits = pygame.sprite.spritecollide(player, all_robots, True, pygame.sprite.collide_mask)
@@ -320,6 +321,15 @@ def game_screen(window):
             death_rect.centerx = player.rect.centerx
             death_rect.bottom = player.rect.top - 10  # 10 pixels acima do jogador
             window.blit(death_anim, death_rect)
+
+        # Desenha a animação de pontuação se o jogador acabou de pontuar
+        if player.scoring:
+            score_anim = assets[SCORE_ANIMATION]
+            score_rect = score_anim.get_rect()
+            # Posiciona a animação acima do jogador, um pouco mais alto que a animação de morte
+            score_rect.centerx = player.rect.centerx
+            score_rect.bottom = player.rect.top - 10  # 10 pixels acima do jogador
+            window.blit(score_anim, score_rect)
 
         pygame.display.update()  # Mostra o novo frame para o jogador
     

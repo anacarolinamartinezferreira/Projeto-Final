@@ -18,6 +18,7 @@ FLOOR_IMG = 'floor_img'
 SCORE_FONT = 'score_font'
 GAME_OVER_SOUND = 'game_over_sound'
 DYING_ANIMATION = 'perde_vida.anim'
+SCORE_ANIMATION = 'score_anim'
 
 
 def load_assets():
@@ -41,6 +42,20 @@ def load_assets():
     # Load death animation with transparency and scale it down
     assets[DYING_ANIMATION] = pygame.image.load(os.path.join(IMG_DIR,'perde_vida.anim.png')).convert_alpha()
     assets[DYING_ANIMATION] = pygame.transform.scale(assets[DYING_ANIMATION], (100, 100))  # Make it smaller, adjust size as needed
+
+    # Load score animation with transparency
+    score_img = pygame.image.load(os.path.join(IMG_DIR,'ganha_ponto.png')).convert_alpha()
+    # Create a copy with per-pixel alpha
+    alpha_img = pygame.Surface(score_img.get_size(), pygame.SRCALPHA)
+    # For each pixel, if it's light colored (close to white), make it transparent
+    for x in range(score_img.get_width()):
+        for y in range(score_img.get_height()):
+            color = score_img.get_at((x, y))
+            if color[0] > 200 and color[1] > 200 and color[2] > 200:  # If it's close to white
+                alpha_img.set_at((x, y), (0, 0, 0, 0))  # Fully transparent
+            else:
+                alpha_img.set_at((x, y), color)  # Keep original color
+    assets[SCORE_ANIMATION] = pygame.transform.scale(alpha_img, (100, 100))  # Scale after processing
 
     pygame.mixer.music.load(os.path.join(SND_DIR,'relaxing-guitar-loop-v5-245859.mp3'))
     assets[GAME_OVER_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'gameover_snd.mp3'))
