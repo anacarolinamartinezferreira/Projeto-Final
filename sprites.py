@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import WIDTH, HEIGHT
-from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION
+from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION, SCORE_2_ANIMATION
 
 
 class Minion(pygame.sprite.Sprite):
@@ -41,6 +41,7 @@ class Minion(pygame.sprite.Sprite):
         self.scoring = False
         self.scoring_start = 0
         self.scoring_duration = 100  # 0.1 segundos de animação
+        self.scoring_type = SCORE_ANIMATION  # Tipo de animação de pontuação
 
         # Mantem dentro da tela
         if self.rect.right > WIDTH:
@@ -88,9 +89,10 @@ class Minion(pygame.sprite.Sprite):
                     self.image = self.assets[MINION_RUN_IMG]
                 self.image.set_alpha(self.alpha)
 
-    def score_point(self):
+    def score_point(self, is_purple=False):
         self.scoring = True
         self.scoring_start = pygame.time.get_ticks()
+        self.scoring_type = SCORE_2_ANIMATION if is_purple else SCORE_ANIMATION
 
     def tomar_dano(self):
         if not self.invencivel:

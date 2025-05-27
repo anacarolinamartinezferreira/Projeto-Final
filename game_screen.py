@@ -262,7 +262,7 @@ def game_screen(window):
                     score += 2
                 else:  # Se estiver normal
                     score += 1
-                player.score_point()  # Trigger scoring animation
+                player.score_point(player.is_purple)  # Trigger scoring animation com o estado do minion roxo
 
             # Verifica se houve colisão entre minion e robô
             hits = pygame.sprite.spritecollide(player, all_robots, True, pygame.sprite.collide_mask)
@@ -324,7 +324,7 @@ def game_screen(window):
 
         # Desenha a animação de pontuação se o jogador acabou de pontuar
         if player.scoring:
-            score_anim = assets[SCORE_ANIMATION]
+            score_anim = assets[player.scoring_type]
             score_rect = score_anim.get_rect()
             # Posiciona a animação acima do jogador, um pouco mais alto que a animação de morte
             score_rect.centerx = player.rect.centerx
