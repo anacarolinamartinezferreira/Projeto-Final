@@ -1,7 +1,7 @@
 import random
 import pygame
 from config import WIDTH, HEIGHT
-from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION, SCORE_2_ANIMATION, PURPLE_TRANSFORM_SOUND, PURPLE_EXPLOSION
+from assets import MINION_STILL_IMG, MINION_RUN_IMG, ROBOT_IMG, BANANA_IMG, PURPLE_MINION_IMG, SORO_IMG, DYING_ANIMATION, SCORE_ANIMATION, SCORE_2_ANIMATION, PURPLE_TRANSFORM_SOUND, PURPLE_EXPLOSION, FAIL_SOUND
 
 
 class Minion(pygame.sprite.Sprite):
@@ -110,6 +110,7 @@ class Minion(pygame.sprite.Sprite):
             self.ultimo_dano = pygame.time.get_ticks()
             self.dying = True
             self.dying_start = pygame.time.get_ticks()
+            self.assets[FAIL_SOUND].play()  # Toca o som de dano
             return True
         return False
     

@@ -23,6 +23,7 @@ SCORE_2_ANIMATION = 'score_2_anim'
 BANANA_SOUND = 'banana_sound'
 PURPLE_TRANSFORM_SOUND = 'purple_transform_sound'
 PURPLE_EXPLOSION = 'purple_explosion'
+FAIL_SOUND = 'fail_sound'
 
 
 def load_assets():
@@ -95,5 +96,6 @@ def load_assets():
     assets[GAME_OVER_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'gameover_snd.mp3'))
     assets[BANANA_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'bana_snd.mp3'))
     assets[PURPLE_TRANSFORM_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'purple_minion.mp3'))
+    assets[FAIL_SOUND] = pygame.mixer.Sound(os.path.join(SND_DIR, 'fail-144746.mp3'))
     pygame.mixer.music.set_volume(0.4)
     return assets
