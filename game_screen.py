@@ -1,7 +1,7 @@
 import pygame
 import random
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED, QUIT, GAME_OVER, INFO, INIT, GAME
-from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND, DYING_ANIMATION, SCORE_ANIMATION
+from assets import load_assets, BACKGROUND, SCORE_FONT,MINION_STILL_IMG,MINION_RUN_IMG,PURPLE_MINION_IMG, GAME_OVER_SOUND, DYING_ANIMATION, SCORE_ANIMATION, BANANA_SOUND
 from sprites import Minion,Robot,Banana,Soro
 
 world_speed=-10 # Velocidade que a tela moverá
@@ -263,6 +263,7 @@ def game_screen(window):
                 else:  # Se estiver normal
                     score += 1
                 player.score_point(player.is_purple)  # Trigger scoring animation com o estado do minion roxo
+                assets[BANANA_SOUND].play()  # Toca o som da banana
 
             # Verifica se houve colisão entre minion e robô
             hits = pygame.sprite.spritecollide(player, all_robots, True, pygame.sprite.collide_mask)
